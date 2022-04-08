@@ -14,9 +14,7 @@ enum Section {
 }
 
 class ViewController: UITableViewController {
-    var page: Int = 0
-    
-    lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, item in
+    private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, item in
         switch item {
         case let item as MovieCellController:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return UITableViewCell() }
@@ -33,7 +31,7 @@ class ViewController: UITableViewController {
         
     }
     
-    var controllers: [MovieCellController] = []
+    private var controllers: [MovieCellController] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,8 +42,10 @@ class ViewController: UITableViewController {
         fetchMovies()
     }
 
-    var isLoadMore: Bool = false
-    func fetchMovies(_ page: Int = 0) {
+    private var isLoadMore: Bool = false
+    private var page: Int = 0
+    
+    private func fetchMovies(_ page: Int = 0) {
         self.page += 1
         
         let apiService = FeedAPIService()
