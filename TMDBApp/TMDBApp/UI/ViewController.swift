@@ -77,5 +77,10 @@ class ViewController: UITableViewController {
             fetchMovies(self.page)
         }
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let controller = self.controllers[indexPath.row]
+        self.navigationController?.pushViewController(MovieDetailVC(), animated: true)
+    }
 }
 
