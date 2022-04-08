@@ -13,7 +13,7 @@ class MovieDetailVC: UIViewController {
     lazy var backdropImageView: UIImageView = {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
-        imgv.contentMode = .scaleAspectFill
+        imgv.contentMode = .scaleAspectFit
         return imgv
     }()
     
@@ -54,10 +54,6 @@ class MovieDetailVC: UIViewController {
         view.backgroundColor = .black
         setupUI()
         getDetail()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        backdropImageView.image = nil
     }
     
     private func setupUI() {
