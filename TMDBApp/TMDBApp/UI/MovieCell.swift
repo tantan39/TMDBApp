@@ -11,7 +11,7 @@ class MovieCell: UITableViewCell {
     lazy var poster: UIImageView = {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
-        imgv.backgroundColor = .yellow
+        imgv.backgroundColor = .black
         imgv.contentMode = .scaleAspectFit
         return imgv
     }()
@@ -19,6 +19,8 @@ class MovieCell: UITableViewCell {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
         return label
     }()
     
