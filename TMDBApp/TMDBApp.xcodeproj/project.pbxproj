@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471697E27FFD8F000DA61A1 /* MovieCell.swift */; };
+		B471698128006F8900DA61A1 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471698028006F8800DA61A1 /* LoadMoreCell.swift */; };
 		B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */; };
 		B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */; };
 		B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 
 /* Begin PBXFileReference section */
 		B471697E27FFD8F000DA61A1 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
+		B471698028006F8800DA61A1 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
 		B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDBApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				B471697E27FFD8F000DA61A1 /* MovieCell.swift */,
+				B471698028006F8800DA61A1 /* LoadMoreCell.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -183,6 +186,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */,
+				B471698128006F8900DA61A1 /* LoadMoreCell.swift in Sources */,
 				B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */,
 				B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */,
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
