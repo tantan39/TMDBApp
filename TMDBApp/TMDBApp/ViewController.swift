@@ -22,7 +22,7 @@ struct MovieCellController: Hashable {
     }
     
     var posterURL: URL {
-        let url = URL(string: "\(ROOT)\(pathImage)")!
+        let url = URL(string: "\(ROOT_IMAGE)/\(pathImage)")!
         return url
     }
 }
