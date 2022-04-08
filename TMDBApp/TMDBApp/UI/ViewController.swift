@@ -14,13 +14,11 @@ enum Section {
 }
 
 class ViewController: UITableViewController {
-    private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, item in
-        switch item {
-        case let item as MovieCellController:
+    private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
+        switch controller {
+        case let controller as MovieCellController:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return UITableViewCell() }
-            cell.titleLabel.text = item.title
-            cell.descriptionLabel.text = item.description
-            cell.poster.sd_setImage(with: item.posterURL, placeholderImage: UIImage(named: "placeHolder"))
+            cell.configCell(controller)
             cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
             return cell
             

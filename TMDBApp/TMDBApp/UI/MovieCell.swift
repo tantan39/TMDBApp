@@ -67,6 +67,12 @@ class MovieCell: UITableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -30),
         ])
     }
+    
+    func configCell(_ controller: MovieCellController) {
+        titleLabel.text = controller.title
+        descriptionLabel.text = controller.description
+        poster.sd_setImage(with: controller.posterURL, placeholderImage: UIImage(named: "placeHolder"))
+    }
 }
 
 

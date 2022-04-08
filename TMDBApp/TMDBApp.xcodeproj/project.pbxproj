@@ -78,7 +78,6 @@
 				B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */,
 				B4856E1E27FFBCF10081C7F3 /* Constants.swift */,
 				B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */,
-				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 				B4856E1027FFBC9E0081C7F3 /* Main.storyboard */,
 				B4856E1327FFBCA20081C7F3 /* Assets.xcassets */,
 				B4856E1527FFBCA20081C7F3 /* LaunchScreen.storyboard */,
@@ -109,6 +108,7 @@
 			children = (
 				B471697E27FFD8F000DA61A1 /* MovieCell.swift */,
 				B471698028006F8800DA61A1 /* LoadMoreCell.swift */,
+				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
