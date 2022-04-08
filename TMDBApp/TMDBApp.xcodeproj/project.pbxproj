@@ -91,7 +91,6 @@
 			isa = PBXGroup;
 			children = (
 				B4856E2327FFBD630081C7F3 /* FeedLoader.swift */,
-				B47169842800708400DA61A1 /* FeedAPIService.swift */,
 				B47169822800705900DA61A1 /* Movie.swift */,
 			);
 			path = Domain;
@@ -100,6 +99,7 @@
 		B4856E2127FFBD220081C7F3 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B47169842800708400DA61A1 /* FeedAPIService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
