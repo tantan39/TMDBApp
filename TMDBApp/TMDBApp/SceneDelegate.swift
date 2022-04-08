@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Resolver
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -51,5 +51,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
 
+}
+
+extension Resolver: ResolverRegistering {
+    public static func registerAllServices() {
+        register {
+            FeedAPIService() as FeedLoader
+        }
+        .scope(.application)
+    }
 }
 

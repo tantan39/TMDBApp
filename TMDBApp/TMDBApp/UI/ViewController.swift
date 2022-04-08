@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import Resolver
 
 enum Section {
     case movie
@@ -30,7 +31,8 @@ class ViewController: UITableViewController {
     }
     
     private var controllers: [MovieCellController] = []
-    
+    @Injected var apiService: FeedLoader
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -46,7 +48,6 @@ class ViewController: UITableViewController {
     private func fetchMovies(_ page: Int = 0) {
         self.page += 1
         
-        let apiService = FeedAPIService()
         apiService.fetchPopularMovies(page: self.page) { [weak self] result in
             guard let self = self else { return }
             self.isLoadMore = false
