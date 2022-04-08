@@ -90,7 +90,7 @@ struct MovieCellController {
     }
     
     var posterURL: URL {
-        let url = URL(string: "\(ROOT_IMAGE)/\(pathImage)")!
+        let url = URL(string: "\(ROOT_IMAGE)w500/\(pathImage)")!
         return url
     }
 }

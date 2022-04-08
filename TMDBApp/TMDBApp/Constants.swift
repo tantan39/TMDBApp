@@ -9,7 +9,7 @@ import Foundation
 
 let API_Key = "d30196018ffea96c0d32f84262af7fe6"
 let ROOT = "https://api.themoviedb.org"
-let ROOT_IMAGE = "http://image.tmdb.org/t/p/w500"
+let ROOT_IMAGE = "http://image.tmdb.org/t/p/"
 
 struct Endpoint {
     static let popularMovies: (_ page: Int) -> String = { page in

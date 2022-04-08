@@ -15,4 +15,11 @@ struct Movie: Decodable {
     let backdrop_path: String?
     let release_date: String?
     let revenue: Int?
+    
+    var backDropURL: URL? {
+        guard let path = backdrop_path else {
+            return nil
+        }
+        return URL(string: "\(ROOT_IMAGE)original/\(path)")!
+    }
 }
