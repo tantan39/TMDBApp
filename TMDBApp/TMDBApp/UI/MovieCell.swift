@@ -70,7 +70,7 @@ class MovieCell: UITableViewCell {
 }
 
 
-struct MovieCellController: Hashable {
+struct MovieCellController {
     let id: AnyHashable
     let title: String
     let pathImage: String
@@ -86,5 +86,11 @@ struct MovieCellController: Hashable {
     var posterURL: URL {
         let url = URL(string: "\(ROOT_IMAGE)/\(pathImage)")!
         return url
+    }
+}
+
+extension MovieCellController: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
