@@ -9,4 +9,5 @@ import Foundation
 
 protocol FeedLoader {
     func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void)
+    func getMovieDetail(_ id: Int, completion: @escaping (Result<Movie, Error>) -> Void)
 }

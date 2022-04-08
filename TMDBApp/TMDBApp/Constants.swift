@@ -15,4 +15,8 @@ struct Endpoint {
     static let popularMovies: (_ page: Int) -> String = { page in
         return "\(ROOT)/3/movie/popular/?api_key=\(API_Key)&page=\(page)"
     }
+    
+    static let details: (_ id: Int) -> String = { id in
+        return "\(ROOT)/3/movie/\(id)?api_key=\(API_Key)"
+    }
 }
