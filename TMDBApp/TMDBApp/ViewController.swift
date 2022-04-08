@@ -6,12 +6,25 @@
 //
 
 import UIKit
+import SDWebImage
 
 struct MovieCellController: Hashable {
     let id: AnyHashable
     let title: String
-    let urlImage: String
+    let pathImage: String
     let description: String
+    
+    internal init(id: AnyHashable, title: String, pathImage: String, description: String) {
+        self.id = id
+        self.title = title
+        self.pathImage = pathImage
+        self.description = description
+    }
+    
+    var posterURL: URL {
+        let url = URL(string: "\(ROOT)\(pathImage)")!
+        return url
+    }
 }
 
 class MovieCell: UITableViewCell {
@@ -19,6 +32,7 @@ class MovieCell: UITableViewCell {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
         imgv.backgroundColor = .yellow
+        imgv.contentMode = .scaleAspectFit
         return imgv
     }()
     
@@ -55,7 +69,7 @@ class MovieCell: UITableViewCell {
             poster.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             poster.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             poster.heightAnchor.constraint(equalToConstant: 200),
-            poster.topAnchor.constraint(equalTo: self.topAnchor),
+            poster.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
         ])
         
         addSubview(titleLabel)
@@ -70,7 +84,7 @@ class MovieCell: UITableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: poster.bottomAnchor, constant: 8),
-            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20),
+            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -30),
         ])
     }
 }
@@ -81,6 +95,8 @@ class ViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return UITableViewCell() }
         cell.titleLabel.text = controller.title
         cell.descriptionLabel.text = controller.description
+        cell.poster.sd_setImage(with: controller.posterURL, placeholderImage: UIImage(named: "placeHolder"))
+        cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         return cell
     }
     
@@ -97,7 +113,7 @@ class ViewController: UITableViewController {
             guard let self = self else { return }
             switch result {
             case let .success(movies):
-                let controllers = movies.map { MovieCellController(id: $0.id, title: $0.title, urlImage: $0.poster_path, description: $0.overview) }
+                let controllers = movies.map { MovieCellController(id: $0.id, title: $0.title, pathImage: $0.poster_path, description: $0.overview) }
                 var snapshot = NSDiffableDataSourceSnapshot<Int,MovieCellController>()
                 snapshot.appendSections([0])
                 snapshot.appendItems(controllers, toSection: 0)
