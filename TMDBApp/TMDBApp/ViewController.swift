@@ -13,12 +13,13 @@ enum Section {
     case loadMore
 }
 
-public struct LoadMoreCellController {
-    let id: AnyHashable
-    let isLoading: Bool
-}
+public struct LoadMoreCellController: Hashable {
+    let id: AnyHashable = UUID()
 
-extension LoadMoreCellController: Hashable {
+    public static func == (lhs: LoadMoreCellController, rhs: LoadMoreCellController) -> Bool {
+        lhs.id == rhs.id
+    }
+    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
@@ -28,7 +29,7 @@ class LoadMoreCell: UITableViewCell {
     lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.translatesAutoresizingMaskIntoConstraints = false
-
+        spinner.startAnimating()
         return spinner
     }()
     
@@ -57,7 +58,8 @@ class LoadMoreCell: UITableViewCell {
 }
 
 class ViewController: UITableViewController {
-
+    var page: Int = 0
+    
     lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, item in
         switch item {
         case let item as MovieCellController:
@@ -70,32 +72,38 @@ class ViewController: UITableViewController {
             
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell") as? LoadMoreCell else { return UITableViewCell() }
-            cell.spinner.startAnimating()
-            cell.backgroundColor = .yellow
             return cell
         }
         
     }
     
+    var controllers: [MovieCellController] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
         self.tableView.register(MovieCell.self, forCellReuseIdentifier: "MovieCell")
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
         fetchMovies()
     }
 
-    func fetchMovies() {
+    var isLoadMore: Bool = false
+    func fetchMovies(_ page: Int = 0) {
+        self.page += 1
+        
         let apiService = FeedAPIService()
-        apiService.fetchPopularMovies(page: 1) { [weak self] result in
+        apiService.fetchPopularMovies(page: self.page) { [weak self] result in
             guard let self = self else { return }
+            self.isLoadMore = false
             switch result {
             case let .success(movies):
                 let controllers = movies.map { MovieCellController(id: $0.id, title: $0.title, pathImage: $0.poster_path, description: $0.overview) }
+                self.controllers.append(contentsOf: controllers)
                 var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
                 snapshot.appendSections([.movie, .loadMore])
-                snapshot.appendItems(controllers, toSection: .movie)
-                snapshot.appendItems([LoadMoreCellController(id: UUID(), isLoading: true)], toSection: .loadMore)
+                snapshot.appendItems(self.controllers, toSection: .movie)
+                snapshot.appendItems([LoadMoreCellController()], toSection: .loadMore)
                 
                 self.datasource.apply(snapshot)
                 
@@ -106,8 +114,14 @@ class ViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
         return indexPath.section == 0 ? UITableView.automaticDimension : 40
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if cell is LoadMoreCell && !self.isLoadMore {
+            self.isLoadMore = true
+            fetchMovies(self.page)
+        }
     }
 }
 
