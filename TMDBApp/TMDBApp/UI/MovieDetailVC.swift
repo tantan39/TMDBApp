@@ -55,6 +55,10 @@ class MovieDetailVC: UIViewController {
         getDetail()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        backdropImageView.image = nil
+    }
+    
     private func setupUI() {
         setupBackdrop()
         setupTitle()
