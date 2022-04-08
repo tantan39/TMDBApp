@@ -75,8 +75,8 @@ class MovieDetailVC: UIViewController {
     private func setupTitle() {
         view.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             titleLabel.topAnchor.constraint(equalTo: backdropImageView.bottomAnchor, constant: 30)
         ])
     }
@@ -84,8 +84,8 @@ class MovieDetailVC: UIViewController {
     private func setupOverviewLabel() {
         view.addSubview(overviewLabel)
         NSLayoutConstraint.activate([
-            overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            overviewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             overviewLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20)
         ])
     }
@@ -93,8 +93,8 @@ class MovieDetailVC: UIViewController {
     private func setupDetailLabel() {
         view.addSubview(detailsLabel)
         NSLayoutConstraint.activate([
-            detailsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            detailsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            detailsLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            detailsLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             detailsLabel.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 20)
         ])
     }
