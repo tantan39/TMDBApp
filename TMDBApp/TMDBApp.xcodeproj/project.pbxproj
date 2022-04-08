@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471697E27FFD8F000DA61A1 /* MovieCell.swift */; };
 		B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */; };
 		B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */; };
 		B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B471697E27FFD8F000DA61A1 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDBApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 		B4856E2227FFBD300081C7F3 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B471697E27FFD8F000DA61A1 /* MovieCell.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 			files = (
 				B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */,
 				B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */,
+				B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */,
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
 				B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */,
 				B4856E1F27FFBCF10081C7F3 /* Constants.swift in Sources */,
