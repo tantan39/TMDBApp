@@ -80,7 +80,7 @@ class ViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let controller = self.controllers[indexPath.row]
-        self.navigationController?.pushViewController(MovieDetailVC(), animated: true)
+        self.navigationController?.pushViewController(MovieDetailVC(movieID: controller.id), animated: true)
     }
 }
 

@@ -77,12 +77,12 @@ class MovieCell: UITableViewCell {
 
 
 struct MovieCellController {
-    let id: AnyHashable
+    let id: Int
     let title: String
     let pathImage: String
     let description: String
     
-    internal init(id: AnyHashable, title: String, pathImage: String, description: String) {
+    internal init(id: Int, title: String, pathImage: String, description: String) {
         self.id = id
         self.title = title
         self.pathImage = pathImage
