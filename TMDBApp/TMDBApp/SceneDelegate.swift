@@ -10,7 +10,7 @@ import Resolver
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-
+    private var navController: UINavigationController?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
@@ -18,14 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        
-        window?.rootViewController = UINavigationController(rootViewController: makeViewController())
+        self.navController = UINavigationController(rootViewController: makeViewController())
+        window?.rootViewController = self.navController
         window?.makeKeyAndVisible()
     }
 
     func makeViewController() -> ViewController {
         let service = FeedAPIService()
-        return ViewController(apiService: service, imageLoader: service)
+        let vc = ViewController(apiService: service, imageLoader: service) { id in
+            self.navController?.pushViewController(MovieDetailVC(movieID: id), animated: true)
+        }
+        return vc
     }
 
 }

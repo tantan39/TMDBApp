@@ -22,11 +22,13 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     var apiService: FeedLoader?
     var imageLoader: ImageDataLoader?
+    private var onSelected: ((Int) -> Void)?
     
-    convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader) {
+    convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, onSelected: ((Int) -> Void)? = { _ in }) {
         self.init()
         self.apiService = apiService
         self.imageLoader = imageLoader
+        self.onSelected = onSelected
     }
     
     private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
@@ -138,7 +140,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-        self.navigationController?.pushViewController(MovieDetailVC(movieID: controller.id), animated: true)
+        self.onSelected?(controller.id)
     }
 }
 
