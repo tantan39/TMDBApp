@@ -18,14 +18,13 @@ class ViewController: UITableViewController {
     private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return UITableViewCell() }
-            cell.configCell(controller)
-            cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
-            return cell
+            return controller.view(in: tableView, forItemAt: indexPath)
+            
+        case let loadMoreController as LoadMoreCellController:
+            return loadMoreController.view(in: tableView, forItemAt: indexPath)
             
         default:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell") as? LoadMoreCell else { return UITableViewCell() }
-            return cell
+            return UITableViewCell()
         }
         
     }

@@ -9,6 +9,11 @@ import UIKit
 
 public struct LoadMoreCellController: Hashable {
     let id: AnyHashable = UUID()
+    
+    func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell") as? LoadMoreCell else { return UITableViewCell() }
+        return cell
+    }
 
     public static func == (lhs: LoadMoreCellController, rhs: LoadMoreCellController) -> Bool {
         lhs.id == rhs.id
