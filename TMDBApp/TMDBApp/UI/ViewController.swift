@@ -58,10 +58,9 @@ class ViewController: UITableViewController {
         self.datasource.apply(snapshot, animatingDifferences: true)
     }
     
-    private func fetchMovies(_ page: Int = 0) {
-        self.page = page + 1
-        
-        apiService.fetchPopularMovies(page: self.page) { [weak self] result in
+    private func fetchMovies(_ page: Int = 1) {
+        self.page = page
+        apiService.fetchPopularMovies(page: page) { [weak self] result in
             guard let self = self else { return }
             self.isLoadMore = false
             switch result {
@@ -89,7 +88,7 @@ class ViewController: UITableViewController {
         let contentHeight = scrollView.contentSize.height
         if (offsetY > contentHeight - scrollView.frame.height) && !self.isLoadMore {
             self.isLoadMore = true
-            self.fetchMovies(self.page)
+            self.fetchMovies(self.page + 1)
         }
     }
     
