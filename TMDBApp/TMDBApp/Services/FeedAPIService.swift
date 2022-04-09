@@ -14,6 +14,7 @@ enum APIError: Error {
 
 class FeedAPIService: FeedLoader {
     let session = URLSession(configuration: .default)
+    var task: URLSessionDataTask?
     
     struct RootItem: Decodable {
         let page: Int
@@ -55,5 +56,26 @@ class FeedAPIService: FeedLoader {
             }
         }
         .resume()
+    }
+}
+
+extension FeedAPIService: ImageDataLoader, ImageDataLoaderTask {
+    
+    func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask {
+        self.task = session.dataTask(with: url) { data, response, error in
+            if let data = data {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    completion(.success(data))
+                }
+            }
+        }
+        self.task?.resume()
+
+        return self
+    }
+    
+    func cancel() {
+        self.task?.cancel()
+        self.task = nil
     }
 }

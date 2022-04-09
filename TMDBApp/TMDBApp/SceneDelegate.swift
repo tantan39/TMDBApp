@@ -58,6 +58,10 @@ extension Resolver: ResolverRegistering {
         register {
             FeedAPIService() as FeedLoader
         }
+        
+        register {
+            FeedAPIService() as ImageDataLoader
+        }
         .scope(.application)
     }
 }

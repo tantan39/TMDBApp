@@ -9,9 +9,11 @@ import UIKit
 import SDWebImage
 import Resolver
 
+protocol ImageDataLoaderTask {
+    func cancel()
+}
 protocol ImageDataLoader {
-    func loadImageData(from url: URL)
-    func cancelImageDataLoad(from url: URL)
+    func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask
 }
 
 enum Section {
@@ -19,13 +21,26 @@ enum Section {
     case loadMore
 }
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
+    
+    private var isLoadMore: Bool = false
+    private var page: Int = 0
+    private var tasks = [IndexPath: ImageDataLoaderTask]()
+    
+    @Injected var apiService: FeedLoader
+    @Injected var imageLoader: ImageDataLoader
+    
     private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
-            self.imageLoader.loadImageData(from: controller.posterURL)
+            cell.poster.image = nil
+            self.tasks[indexPath] = self.imageLoader.loadImageData(from: controller.posterURL) { result in
+                let data = try? result.get()
+                cell.poster.image = data.map(UIImage.init) ?? nil
+            }
             return cell
+            
         case let loadMoreController as LoadMoreCellController:
             return loadMoreController.view(in: tableView, forItemAt: indexPath)
             
@@ -34,11 +49,6 @@ class ViewController: UITableViewController {
         }
         
     }
-    
-    private var isLoadMore: Bool = false
-    private var page: Int = 0
-    @Injected var apiService: FeedLoader
-    @Injected var imageLoader: ImageDataLoader
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,8 +93,22 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-        imageLoader.cancelImageDataLoad(from: controller.posterURL)
+        tasks[indexPath]?.cancel()
+        tasks[indexPath] = nil
+    }
+
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
+            tasks[indexPath] = imageLoader.loadImageData(from: controller.posterURL, completion: { _ in })
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        indexPaths.forEach { indexPath in
+            tasks[indexPath]?.cancel()
+            tasks[indexPath] = nil
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

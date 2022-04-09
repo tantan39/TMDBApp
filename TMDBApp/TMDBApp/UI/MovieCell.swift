@@ -96,13 +96,12 @@ struct MovieCellController {
         return url
     }
     
-    func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return UITableViewCell() }
+    func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> MovieCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
         cell.configCell(self)
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         return cell
     }
-
 }
 
 extension MovieCellController: Hashable {
