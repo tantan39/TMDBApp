@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIError: Error {
+enum Error: Swift.Error {
     case invalidData
     case connectionError
 }
@@ -29,10 +29,10 @@ class FeedAPIService: FeedLoader {
                     if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
                         completion(.success(root.results))
                     } else {
-                        completion(.failure(APIError.invalidData))
+                        completion(.failure(.invalidData))
                     }
                 } else {
-                    completion(.failure(APIError.connectionError))
+                    completion(.failure(.connectionError))
                 }
             }
         }
@@ -47,10 +47,10 @@ class FeedAPIService: FeedLoader {
                     if let movie = try? JSONDecoder().decode(Movie.self, from: data) {
                         completion(.success(movie))
                     } else {
-                        completion(.failure(APIError.invalidData))
+                        completion(.failure(.invalidData))
                     }
                 } else {
-                    completion(.failure(APIError.connectionError))
+                    completion(.failure(.connectionError))
                 }
             }
         }
