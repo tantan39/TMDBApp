@@ -7,7 +7,6 @@
 
 import UIKit
 import SDWebImage
-import Resolver
 
 enum Section {
     case movie

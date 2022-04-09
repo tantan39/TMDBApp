@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Resolver
 
 class MovieDetailVC: UIViewController {
     lazy var backdropImageView: UIImageView = {
@@ -43,10 +42,11 @@ class MovieDetailVC: UIViewController {
     }()
     
     var movieID: Int?
-    @Injected var apiService: FeedLoader
+    private var apiService: FeedLoader?
     
-    convenience init(movieID: Int) {
+    convenience init(service: FeedLoader, movieID: Int) {
         self.init()
+        self.apiService = service
         self.movieID = movieID
     }
     
@@ -104,7 +104,7 @@ class MovieDetailVC: UIViewController {
         guard let id = movieID else {
             return
         }
-        apiService.getMovieDetail(id) { result in
+        apiService?.getMovieDetail(id) { result in
             switch result {
             case let .success(movie):
                 self.configView(movie)

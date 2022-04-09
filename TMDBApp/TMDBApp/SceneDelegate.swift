@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Resolver
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
@@ -26,23 +25,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func makeViewController() -> ViewController {
         let service = FeedAPIService()
         let vc = ViewController(apiService: service, imageLoader: service) { id in
-            self.navController?.pushViewController(MovieDetailVC(movieID: id), animated: true)
+            self.navController?.pushViewController(MovieDetailVC(service: service, movieID: id), animated: true)
         }
         return vc
     }
 
 }
-
-extension Resolver: ResolverRegistering {
-    public static func registerAllServices() {
-        register {
-            FeedAPIService() as FeedLoader
-        }
-        
-        register {
-            FeedAPIService() as ImageDataLoader
-        }
-        .scope(.application)
-    }
-}
-
