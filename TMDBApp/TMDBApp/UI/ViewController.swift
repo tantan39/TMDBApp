@@ -19,8 +19,8 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var page: Int = 0
     private var tasks = [IndexPath: ImageDataLoaderTask]()
     
-    var apiService: FeedLoader?
-    var imageLoader: ImageDataLoader?
+    private var apiService: FeedLoader?
+    private var imageLoader: ImageDataLoader?
     private var onSelected: ((Int) -> Void)?
     
     convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, onSelected: ((Int) -> Void)? = { _ in }) {
