@@ -8,7 +8,7 @@
 import UIKit
 
 class MovieCell: UITableViewCell {
-    lazy var poster: UIImageView = {
+    var poster: UIImageView = {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
         imgv.backgroundColor = .black
@@ -40,11 +40,6 @@ class MovieCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        setupUI()
-    }
-    
     private func setupUI() {
         addSubview(poster)
         NSLayoutConstraint.activate([
@@ -69,12 +64,6 @@ class MovieCell: UITableViewCell {
             descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -30),
         ])
     }
-    
-    func configCell(_ controller: MovieCellController) {
-        titleLabel.text = controller.title
-        descriptionLabel.text = controller.description
-//        poster.sd_setImage(with: controller.posterURL, placeholderImage: UIImage(named: "placeHolder"))
-    }
 }
 
 
@@ -98,7 +87,8 @@ struct MovieCellController {
     
     func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> MovieCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
-        cell.configCell(self)
+        cell.titleLabel.text = self.title
+        cell.descriptionLabel.text = self.description
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         return cell
     }

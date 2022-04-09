@@ -35,10 +35,12 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
             cell.poster.image = nil
+            cell.isShimmering = true
             self.tasks[indexPath] = self.imageLoader.loadImageData(from: controller.posterURL) { [weak cell] result in
                 let data = try? result.get()
                 DispatchQueue.main.async {
-                    cell?.poster.image = data.map(UIImage.init) ?? nil
+                    cell?.isShimmering = false
+                    cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
                 }
             }
             return cell
