@@ -57,8 +57,9 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.title = "Popular"
         
-        tableView.prefetchDataSource = self
+        self.tableView.prefetchDataSource = self
         self.tableView.register(MovieCell.self, forCellReuseIdentifier: "MovieCell")
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
         fetchMovies()
