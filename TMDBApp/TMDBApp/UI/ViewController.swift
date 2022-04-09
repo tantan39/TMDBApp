@@ -30,7 +30,6 @@ class ViewController: UITableViewController {
         
     }
     
-    private var controllers: [MovieCellController] = []
     private var isLoadMore: Bool = false
     private var page: Int = 0
     @Injected var apiService: FeedLoader
@@ -93,7 +92,7 @@ class ViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let controller = self.controllers[indexPath.row]
+        guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
         self.navigationController?.pushViewController(MovieDetailVC(movieID: controller.id), animated: true)
     }
 }
