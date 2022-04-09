@@ -9,13 +9,6 @@ import UIKit
 import SDWebImage
 import Resolver
 
-protocol ImageDataLoaderTask {
-    func cancel()
-}
-protocol ImageDataLoader {
-    func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask
-}
-
 enum Section {
     case movie
     case loadMore
