@@ -13,9 +13,9 @@ enum Error: Swift.Error {
 }
 
 class FeedAPIService: FeedLoader {
-    let session = URLSession(configuration: .default)
+    private let session = URLSession(configuration: .default)
     
-    struct RootItem: Decodable {
+    private struct RootItem: Decodable {
         let page: Int
         let results: [Movie]
     }
