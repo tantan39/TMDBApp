@@ -23,7 +23,6 @@ class LoadMoreCell: UITableViewCell {
     lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(style: .medium)
         spinner.translatesAutoresizingMaskIntoConstraints = false
-        spinner.startAnimating()
         return spinner
     }()
     
@@ -48,5 +47,7 @@ class LoadMoreCell: UITableViewCell {
             spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             spinner.heightAnchor.constraint(equalToConstant: 40)
         ])
+        
+        spinner.startAnimating()
     }
 }

@@ -45,8 +45,23 @@ class ViewController: UITableViewController {
     private var isLoadMore: Bool = false
     private var page: Int = 0
     
+    private func set(_ newItems: [MovieCellController]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
+        snapshot.appendSections([.movie, .loadMore])
+        snapshot.appendItems(newItems, toSection: .movie)
+        snapshot.appendItems([LoadMoreCellController()], toSection: .loadMore)
+        self.datasource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    private func append(_ newItems: [MovieCellController]) {
+        var snapshot = datasource.snapshot()
+        snapshot.appendItems(newItems, toSection: .movie)
+        self.datasource.apply(snapshot, animatingDifferences: true)
+    }
+    
+    
     private func fetchMovies(_ page: Int = 0) {
-        self.page += 1
+        self.page = page + 1
         
         apiService.fetchPopularMovies(page: self.page) { [weak self] result in
             guard let self = self else { return }
@@ -54,13 +69,11 @@ class ViewController: UITableViewController {
             switch result {
             case let .success(movies):
                 let controllers = movies.map { MovieCellController(id: $0.id, title: $0.title, pathImage: $0.poster_path, description: $0.overview) }
-                self.controllers.append(contentsOf: controllers)
-                var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
-                snapshot.appendSections([.movie, .loadMore])
-                snapshot.appendItems(self.controllers, toSection: .movie)
-                snapshot.appendItems([LoadMoreCellController()], toSection: .loadMore)
-                
-                self.datasource.apply(snapshot)
+                if self.page == 1 {
+                    self.set(controllers)
+                } else {
+                    self.append(controllers)
+                }
                 
             default:
                 break
@@ -72,10 +85,14 @@ class ViewController: UITableViewController {
         return indexPath.section == 0 ? UITableView.automaticDimension : 40
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if cell is LoadMoreCell && !self.isLoadMore {
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView.isDragging else { return }
+        
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        if (offsetY > contentHeight - scrollView.frame.height) && !self.isLoadMore {
             self.isLoadMore = true
-            fetchMovies(self.page)
+            self.fetchMovies(self.page)
         }
     }
     
