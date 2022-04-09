@@ -121,7 +121,8 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? UITableView.automaticDimension : 40
+        guard let _ = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return 40 }
+        return UITableView.automaticDimension
     }
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView) {
