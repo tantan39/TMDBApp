@@ -9,6 +9,11 @@ import UIKit
 import SDWebImage
 import Resolver
 
+protocol ImageDataLoader {
+    func loadImageData(from url: URL)
+    func cancelImageDataLoad(from url: URL)
+}
+
 enum Section {
     case movie
     case loadMore
@@ -18,8 +23,9 @@ class ViewController: UITableViewController {
     private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
-            return controller.view(in: tableView, forItemAt: indexPath)
-            
+            let cell = controller.view(in: tableView, forItemAt: indexPath)
+            self.imageLoader.loadImageData(from: controller.posterURL)
+            return cell
         case let loadMoreController as LoadMoreCellController:
             return loadMoreController.view(in: tableView, forItemAt: indexPath)
             
@@ -32,6 +38,7 @@ class ViewController: UITableViewController {
     private var isLoadMore: Bool = false
     private var page: Int = 0
     @Injected var apiService: FeedLoader
+    @Injected var imageLoader: ImageDataLoader
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +80,11 @@ class ViewController: UITableViewController {
                 break
             }
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
+        imageLoader.cancelImageDataLoad(from: controller.posterURL)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

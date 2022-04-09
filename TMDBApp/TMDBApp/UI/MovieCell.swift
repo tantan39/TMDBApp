@@ -73,7 +73,7 @@ class MovieCell: UITableViewCell {
     func configCell(_ controller: MovieCellController) {
         titleLabel.text = controller.title
         descriptionLabel.text = controller.description
-        poster.sd_setImage(with: controller.posterURL, placeholderImage: UIImage(named: "placeHolder"))
+//        poster.sd_setImage(with: controller.posterURL, placeholderImage: UIImage(named: "placeHolder"))
     }
 }
 
