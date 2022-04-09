@@ -14,7 +14,7 @@ class MovieDetailVC: UIViewController {
         imgv.translatesAutoresizingMaskIntoConstraints = false
         imgv.contentMode = .scaleAspectFill
         imgv.clipsToBounds = true
-        
+        imgv.isHidden = true
         return imgv
     }()
     
@@ -23,6 +23,7 @@ class MovieDetailVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = .systemFont(ofSize: 20, weight: .semibold)
+        label.isHidden = true
         return label
     }()
     
@@ -32,6 +33,7 @@ class MovieDetailVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.font = .systemFont(ofSize: 18, weight: .medium)
+        label.isHidden = true
         return label
     }()
     
@@ -40,6 +42,7 @@ class MovieDetailVC: UIViewController {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        label.isHidden = true
         return label
     }()
     
@@ -118,6 +121,7 @@ class MovieDetailVC: UIViewController {
     
     private func configView(_ movie: Movie) {
         self.backdropImageView.sd_setImage(with: movie.backDropURL, placeholderImage: UIImage(named: "placeHolder"), options: .refreshCached)
+
         self.titleLabel.text = movie.title
         self.overviewLabel.text = movie.overview
         
@@ -132,5 +136,12 @@ class MovieDetailVC: UIViewController {
         ]))
         
         self.detailsLabel.attributedText = attributeString
+        
+        UIView.transition(with: self.view, duration: 0.33, options: .transitionCrossDissolve, animations: {
+            self.backdropImageView.isHidden = false
+            self.titleLabel.isHidden = false
+            self.overviewLabel.isHidden = false
+            self.detailsLabel.isHidden = false
+        })
     }
 }
