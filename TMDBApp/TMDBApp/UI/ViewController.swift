@@ -31,6 +31,8 @@ class ViewController: UITableViewController {
     }
     
     private var controllers: [MovieCellController] = []
+    private var isLoadMore: Bool = false
+    private var page: Int = 0
     @Injected var apiService: FeedLoader
 
     override func viewDidLoad() {
@@ -42,9 +44,6 @@ class ViewController: UITableViewController {
         fetchMovies()
     }
 
-    private var isLoadMore: Bool = false
-    private var page: Int = 0
-    
     private func set(_ newItems: [MovieCellController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
         snapshot.appendSections([.movie, .loadMore])
@@ -59,7 +58,6 @@ class ViewController: UITableViewController {
         self.datasource.apply(snapshot, animatingDifferences: true)
     }
     
-    
     private func fetchMovies(_ page: Int = 0) {
         self.page = page + 1
         
@@ -68,12 +66,11 @@ class ViewController: UITableViewController {
             self.isLoadMore = false
             switch result {
             case let .success(movies):
-                let controllers = movies.map { MovieCellController(id: $0.id, title: $0.title, pathImage: $0.poster_path, description: $0.overview) }
-                if self.page == 1 {
-                    self.set(controllers)
-                } else {
-                    self.append(controllers)
-                }
+                let controllers = movies.map { MovieCellController(id: $0.id,
+                                                                   title: $0.title,
+                                                                   pathImage: $0.poster_path,
+                                                                   description: $0.overview) }
+                self.page == 1 ? self.set(controllers) : self.append(controllers)
                 
             default:
                 break
