@@ -97,6 +97,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         }
     }
     
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
+        tasks[indexPath] = imageLoader.loadImageData(from: controller.posterURL, completion: { _ in })
+    }
+    
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         tasks[indexPath]?.cancel()
         tasks[indexPath] = nil
