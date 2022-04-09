@@ -12,7 +12,9 @@ class MovieDetailVC: UIViewController {
     lazy var backdropImageView: UIImageView = {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
-        imgv.contentMode = .scaleAspectFit
+        imgv.contentMode = .scaleAspectFill
+        imgv.clipsToBounds = true
+        
         return imgv
     }()
     
