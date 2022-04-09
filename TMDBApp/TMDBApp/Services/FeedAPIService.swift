@@ -58,15 +58,6 @@ class FeedAPIService: FeedLoader {
     }
 }
 
-private final class URLSessionTaskWrapper: ImageDataLoaderTask {
-    var wrapped: URLSessionDataTask?
-    
-    func cancel() {
-        wrapped?.cancel()
-        wrapped = nil
-    }
-}
-
 extension FeedAPIService: ImageDataLoader {
     
     func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask {
@@ -78,7 +69,17 @@ extension FeedAPIService: ImageDataLoader {
             }
         }
         task.wrapped?.resume()
-
+        
         return task
     }
 }
+
+private final class URLSessionTaskWrapper: ImageDataLoaderTask {
+    var wrapped: URLSessionDataTask?
+    
+    func cancel() {
+        wrapped?.cancel()
+        wrapped = nil
+    }
+}
+
