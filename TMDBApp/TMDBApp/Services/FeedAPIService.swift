@@ -64,9 +64,7 @@ extension FeedAPIService: ImageDataLoader, ImageDataLoaderTask {
     func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask {
         self.task = session.dataTask(with: url) { data, response, error in
             if let data = data {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    completion(.success(data))
-                }
+                completion(.success(data))
             }
         }
         self.task?.resume()

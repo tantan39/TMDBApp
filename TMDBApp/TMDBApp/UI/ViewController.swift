@@ -35,9 +35,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
             cell.poster.image = nil
-            self.tasks[indexPath] = self.imageLoader.loadImageData(from: controller.posterURL) { result in
+            self.tasks[indexPath] = self.imageLoader.loadImageData(from: controller.posterURL) { [weak cell] result in
                 let data = try? result.get()
-                cell.poster.image = data.map(UIImage.init) ?? nil
+                DispatchQueue.main.async {
+                    cell?.poster.image = data.map(UIImage.init) ?? nil
+                }
             }
             return cell
             
@@ -54,6 +56,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        tableView.prefetchDataSource = self
         self.tableView.register(MovieCell.self, forCellReuseIdentifier: "MovieCell")
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
         fetchMovies()
