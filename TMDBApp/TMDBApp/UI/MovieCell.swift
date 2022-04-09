@@ -46,7 +46,7 @@ class MovieCell: UITableViewCell {
             poster.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             poster.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             poster.heightAnchor.constraint(equalToConstant: 200),
-            poster.topAnchor.constraint(equalTo: self.topAnchor, constant: 20),
+            poster.topAnchor.constraint(equalTo: self.topAnchor)
         ])
         
         addSubview(titleLabel)
@@ -61,7 +61,7 @@ class MovieCell: UITableViewCell {
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             descriptionLabel.topAnchor.constraint(equalTo: poster.bottomAnchor, constant: 8),
-            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -30),
+            descriptionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -40),
         ])
     }
 }
