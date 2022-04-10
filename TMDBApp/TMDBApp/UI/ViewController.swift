@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 enum Section {
     case movie
