@@ -27,7 +27,6 @@ class MovieDetailVC: UIViewController {
         imgv.contentMode = .scaleAspectFill
         imgv.clipsToBounds = true
         imgv.isHidden = true
-        imgv.image = UIImage(named: "placeHolder")
         return imgv
     }()
     
