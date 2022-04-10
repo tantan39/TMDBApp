@@ -52,8 +52,19 @@ class ViewControllerTests: XCTestCase {
             XCTAssertEqual(controller.pathImage, item.poster_path)
             
             XCTAssertEqual(cell.titleLabel.text, item.title)
-            XCTAssertEqual(cell.descriptionLabel.text, item.overview)            
+            XCTAssertEqual(cell.descriptionLabel.text, item.overview)
         }
+    }
+    
+    func test_fetchMovies_failure_renderingEmpty() throws {
+        let (viewController, loader) = makeSUT()
+
+        viewController.loadViewIfNeeded()
+        loader.completeWithError(.invalidData, at: 0)
+        
+        let snapshot = viewController.datasource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems, 0)
+        XCTAssertEqual(snapshot.numberOfSections, 0)
     }
     
     // MARK: - Helpers
@@ -78,6 +89,10 @@ class ViewControllerTests: XCTestCase {
         
         func complete(with items: [Movie], at index: Int = 0) {
             messages[index](.success(items))
+        }
+        
+        func completeWithError(_ error: Error, at index: Int = 0) {
+            messages[index](.failure(error))
         }
         
         func getMovieDetail(_ id: Int, completion: @escaping (Result<Movie, Error>) -> Void) { }
