@@ -9,6 +9,18 @@ import Foundation
 import UIKit
 
 class MovieDetailVC: UIViewController {
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+    
+    lazy var containerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var backdropImageView: UIImageView = {
         let imgv = UIImageView()
         imgv.translatesAutoresizingMaskIntoConstraints = false
@@ -62,33 +74,56 @@ class MovieDetailVC: UIViewController {
     }
     
     private func setupUI() {
+        setupScrollView()
+        setupContainerView()
         setupBackdrop()
         setupTitle()
         setupOverviewLabel()
         setupDetailLabel()
     }
     
-    private func setupBackdrop() {
-        view.addSubview(backdropImageView)
+    private func setupScrollView() {
+        view.addSubview(scrollView)
         NSLayoutConstraint.activate([
-            backdropImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backdropImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backdropImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    private func setupContainerView() {
+        scrollView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        ])
+    }
+    
+    private func setupBackdrop() {
+        containerView.addSubview(backdropImageView)
+        NSLayoutConstraint.activate([
+            backdropImageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            backdropImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            backdropImageView.topAnchor.constraint(equalTo: containerView.topAnchor),
             backdropImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6)
         ])
     }
     
     private func setupTitle() {
-        view.addSubview(titleLabel)
+        containerView.addSubview(titleLabel)
         NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            titleLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
             titleLabel.topAnchor.constraint(equalTo: backdropImageView.bottomAnchor, constant: 30)
         ])
     }
     
     private func setupOverviewLabel() {
-        view.addSubview(overviewLabel)
+        containerView.addSubview(overviewLabel)
         NSLayoutConstraint.activate([
             overviewLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             overviewLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
@@ -97,11 +132,12 @@ class MovieDetailVC: UIViewController {
     }
     
     private func setupDetailLabel() {
-        view.addSubview(detailsLabel)
+        containerView.addSubview(detailsLabel)
         NSLayoutConstraint.activate([
             detailsLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             detailsLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            detailsLabel.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 20)
+            detailsLabel.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 20),
+            detailsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -60)
         ])
     }
     
