@@ -27,6 +27,7 @@ class MovieDetailVC: UIViewController {
         imgv.contentMode = .scaleAspectFill
         imgv.clipsToBounds = true
         imgv.isHidden = true
+        imgv.image = UIImage(named: "placeHolder")
         return imgv
     }()
     
@@ -60,10 +61,13 @@ class MovieDetailVC: UIViewController {
     
     var movieID: Int?
     private var apiService: FeedLoader?
+    private var imageLoader: ImageDataLoader?
+    private var task: ImageDataLoaderTask?
     
-    convenience init(service: FeedLoader, movieID: Int) {
+    convenience init(service: FeedLoader, imageLoader: ImageDataLoader, movieID: Int) {
         self.init()
         self.apiService = service
+        self.imageLoader = imageLoader
         self.movieID = movieID
     }
     
@@ -71,6 +75,10 @@ class MovieDetailVC: UIViewController {
         view.backgroundColor = .black
         setupUI()
         getDetail()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.task = nil
     }
     
     private func setupUI() {
@@ -156,7 +164,16 @@ class MovieDetailVC: UIViewController {
     }
     
     private func configView(_ movie: Movie) {
-        self.backdropImageView.sd_setImage(with: movie.backDropURL, placeholderImage: UIImage(named: "placeHolder"), options: .refreshCached)
+        if let url = movie.backDropURL {
+            self.task = imageLoader?.loadImageData(from: url, completion: { result in
+                if let data = try? result.get() {
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data)
+                        self.backdropImageView.setImageAnimated(image)
+                    }
+                }
+            })
+        }
 
         self.titleLabel.text = movie.title
         self.overviewLabel.text = "Description: \(movie.overview)"
@@ -173,7 +190,7 @@ class MovieDetailVC: UIViewController {
         
         self.detailsLabel.attributedText = attributeString
         
-        UIView.transition(with: self.view, duration: 0.33, options: .transitionCrossDissolve, animations: {
+        UIView.transition(with: self.view, duration: 0.2, options: .transitionCrossDissolve, animations: {
             self.backdropImageView.isHidden = false
             self.titleLabel.isHidden = false
             self.overviewLabel.isHidden = false
