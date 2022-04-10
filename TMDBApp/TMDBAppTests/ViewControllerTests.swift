@@ -45,9 +45,14 @@ class ViewControllerTests: XCTestCase {
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
             
+            let cell = controller.view(in: viewController.tableView, forItemAt: IndexPath(row: index, section: 0))
+            
             XCTAssertEqual(controller.title, item.title)
             XCTAssertEqual(controller.description, item.overview)
             XCTAssertEqual(controller.pathImage, item.poster_path)
+            
+            XCTAssertEqual(cell.titleLabel.text, item.title)
+            XCTAssertEqual(cell.descriptionLabel.text, item.overview)            
         }
     }
     
