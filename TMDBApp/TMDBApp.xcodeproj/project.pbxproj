@@ -12,8 +12,6 @@
 		B47169832800705900DA61A1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169822800705900DA61A1 /* Movie.swift */; };
 		B47169852800708400DA61A1 /* FeedAPIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169842800708400DA61A1 /* FeedAPIService.swift */; };
 		B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4716986280074B000DA61A1 /* MovieDetailVC.swift */; };
-		B471698A280099D100DA61A1 /* Resolver in Frameworks */ = {isa = PBXBuildFile; productRef = B4716989280099D100DA61A1 /* Resolver */; };
-		B471698E280099D100DA61A1 /* Resolver-Static in Frameworks */ = {isa = PBXBuildFile; productRef = B471698D280099D100DA61A1 /* Resolver-Static */; };
 		B47169912801ECD100DA61A1 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169902801ECD100DA61A1 /* UIView+Extension.swift */; };
 		B47169932801FD1C00DA61A1 /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169922801FD1C00DA61A1 /* ImageDataLoader.swift */; };
 		B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */; };
@@ -53,9 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B471698A280099D100DA61A1 /* Resolver in Frameworks */,
 				B4856E2927FFD1E10081C7F3 /* SDWebImageMapKit in Frameworks */,
-				B471698E280099D100DA61A1 /* Resolver-Static in Frameworks */,
 				B4856E2727FFD1E10081C7F3 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -153,8 +149,6 @@
 			packageProductDependencies = (
 				B4856E2627FFD1E10081C7F3 /* SDWebImage */,
 				B4856E2827FFD1E10081C7F3 /* SDWebImageMapKit */,
-				B4716989280099D100DA61A1 /* Resolver */,
-				B471698D280099D100DA61A1 /* Resolver-Static */,
 			);
 			productName = TMDBApp;
 			productReference = B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */;
@@ -186,7 +180,6 @@
 			mainGroup = B4856DFE27FFBC9E0081C7F3;
 			packageReferences = (
 				B4856E2527FFD1E10081C7F3 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				B4716988280099D100DA61A1 /* XCRemoteSwiftPackageReference "Resolver" */,
 			);
 			productRefGroup = B4856E0827FFBC9E0081C7F3 /* Products */;
 			projectDirPath = "";
@@ -448,14 +441,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		B4716988280099D100DA61A1 /* XCRemoteSwiftPackageReference "Resolver" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/hmlongco/Resolver.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 		B4856E2527FFD1E10081C7F3 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
@@ -467,16 +452,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		B4716989280099D100DA61A1 /* Resolver */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4716988280099D100DA61A1 /* XCRemoteSwiftPackageReference "Resolver" */;
-			productName = Resolver;
-		};
-		B471698D280099D100DA61A1 /* Resolver-Static */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = B4716988280099D100DA61A1 /* XCRemoteSwiftPackageReference "Resolver" */;
-			productName = "Resolver-Static";
-		};
 		B4856E2627FFD1E10081C7F3 /* SDWebImage */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B4856E2527FFD1E10081C7F3 /* XCRemoteSwiftPackageReference "SDWebImage" */;

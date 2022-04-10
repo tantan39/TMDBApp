@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "Resolver",
-        "repositoryURL": "https://github.com/hmlongco/Resolver.git",
-        "state": {
-          "branch": "master",
-          "revision": "bd565aae33a08dd4e10747bfb98e2bf8a63bfa28",
-          "version": null
-        }
-      },
-      {
         "package": "SDWebImage",
         "repositoryURL": "https://github.com/SDWebImage/SDWebImage",
         "state": {
