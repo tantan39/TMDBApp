@@ -32,6 +32,25 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .loadMore), 1)
     }
     
+    func test_fetchMovies_renderingCells() throws {
+        let (viewController, loader) = makeSUT()
+        let movies = [
+            makeMovieItem(id: 0),
+            makeMovieItem(id: 1, title: "another title", overView: "another overview")
+        ]
+        
+        viewController.loadViewIfNeeded()
+        loader.complete(with: movies, at: 0)
+        let snapshot = viewController.datasource.snapshot()
+        for (index, item) in movies.enumerated() {
+            let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
+            
+            XCTAssertEqual(controller.title, item.title)
+            XCTAssertEqual(controller.description, item.overview)
+            XCTAssertEqual(controller.pathImage, item.poster_path)
+        }
+    }
+    
     // MARK: - Helpers
     private func makeSUT() -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
@@ -60,4 +79,10 @@ class ViewControllerTests: XCTestCase {
     }
     
     
+}
+
+extension ViewController {
+    func cellForRowAt(row: Int, section: Section) -> UITableViewCell? {
+        tableView.cellForRow(at: IndexPath(row: row, section: section.hashValue))
+    }
 }
