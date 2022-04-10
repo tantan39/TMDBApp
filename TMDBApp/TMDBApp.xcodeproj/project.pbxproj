@@ -14,6 +14,7 @@
 		B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4716986280074B000DA61A1 /* MovieDetailVC.swift */; };
 		B47169912801ECD100DA61A1 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169902801ECD100DA61A1 /* UIView+Extension.swift */; };
 		B47169932801FD1C00DA61A1 /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169922801FD1C00DA61A1 /* ImageDataLoader.swift */; };
+		B47169A228031B3200DA61A1 /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169A128031B3200DA61A1 /* ViewControllerTests.swift */; };
 		B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */; };
 		B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */; };
 		B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */; };
@@ -26,6 +27,16 @@
 		B4856E2927FFD1E10081C7F3 /* SDWebImageMapKit in Frameworks */ = {isa = PBXBuildFile; productRef = B4856E2827FFD1E10081C7F3 /* SDWebImageMapKit */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B471699C28031A5000DA61A1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B4856DFF27FFBC9E0081C7F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B4856E0627FFBC9E0081C7F3;
+			remoteInfo = TMDBApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		B471697E27FFD8F000DA61A1 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		B471698028006F8800DA61A1 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
@@ -34,6 +45,8 @@
 		B4716986280074B000DA61A1 /* MovieDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailVC.swift; sourceTree = "<group>"; };
 		B47169902801ECD100DA61A1 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		B47169922801FD1C00DA61A1 /* ImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataLoader.swift; sourceTree = "<group>"; };
+		B471699828031A4F00DA61A1 /* TMDBAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TMDBAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B47169A128031B3200DA61A1 /* ViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTests.swift; sourceTree = "<group>"; };
 		B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDBApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -47,6 +60,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B471699528031A4F00DA61A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B4856E0427FFBC9E0081C7F3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -67,10 +87,19 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		B471699928031A5000DA61A1 /* TMDBAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				B47169A128031B3200DA61A1 /* ViewControllerTests.swift */,
+			);
+			path = TMDBAppTests;
+			sourceTree = "<group>";
+		};
 		B4856DFE27FFBC9E0081C7F3 = {
 			isa = PBXGroup;
 			children = (
 				B4856E0927FFBC9E0081C7F3 /* TMDBApp */,
+				B471699928031A5000DA61A1 /* TMDBAppTests */,
 				B4856E0827FFBC9E0081C7F3 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */,
+				B471699828031A4F00DA61A1 /* TMDBAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -133,6 +163,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B471699728031A4F00DA61A1 /* TMDBAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B471699E28031A5000DA61A1 /* Build configuration list for PBXNativeTarget "TMDBAppTests" */;
+			buildPhases = (
+				B471699428031A4F00DA61A1 /* Sources */,
+				B471699528031A4F00DA61A1 /* Frameworks */,
+				B471699628031A4F00DA61A1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B471699D28031A5000DA61A1 /* PBXTargetDependency */,
+			);
+			name = TMDBAppTests;
+			productName = TMDBAppTests;
+			productReference = B471699828031A4F00DA61A1 /* TMDBAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B4856E0627FFBC9E0081C7F3 /* TMDBApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B4856E1B27FFBCA20081C7F3 /* Build configuration list for PBXNativeTarget "TMDBApp" */;
@@ -164,6 +212,11 @@
 				LastSwiftUpdateCheck = 1320;
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
+					B471699728031A4F00DA61A1 = {
+						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
+						TestTargetID = B4856E0627FFBC9E0081C7F3;
+					};
 					B4856E0627FFBC9E0081C7F3 = {
 						CreatedOnToolsVersion = 13.2.1;
 					};
@@ -186,11 +239,19 @@
 			projectRoot = "";
 			targets = (
 				B4856E0627FFBC9E0081C7F3 /* TMDBApp */,
+				B471699728031A4F00DA61A1 /* TMDBAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B471699628031A4F00DA61A1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B4856E0527FFBC9E0081C7F3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,6 +265,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B471699428031A4F00DA61A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B47169A228031B3200DA61A1 /* ViewControllerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B4856E0327FFBC9E0081C7F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -225,6 +294,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B471699D28031A5000DA61A1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B4856E0627FFBC9E0081C7F3 /* TMDBApp */;
+			targetProxy = B471699C28031A5000DA61A1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B4856E1027FFBC9E0081C7F3 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -245,6 +322,55 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B471699F28031A5000DA61A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FL29S3YYFY;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tantt.reminder.TMDBAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TMDBApp.app/TMDBApp";
+			};
+			name = Debug;
+		};
+		B47169A028031A5000DA61A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FL29S3YYFY;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tantt.reminder.TMDBAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TMDBApp.app/TMDBApp";
+			};
+			name = Release;
+		};
 		B4856E1927FFBCA20081C7F3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -420,6 +546,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B471699E28031A5000DA61A1 /* Build configuration list for PBXNativeTarget "TMDBAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B471699F28031A5000DA61A1 /* Debug */,
+				B47169A028031A5000DA61A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B4856E0227FFBC9E0081C7F3 /* Build configuration list for PBXProject "TMDBApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

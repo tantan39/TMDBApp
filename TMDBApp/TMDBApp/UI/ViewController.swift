@@ -30,7 +30,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.onSelected = onSelected
     }
     
-    private lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
+    lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
