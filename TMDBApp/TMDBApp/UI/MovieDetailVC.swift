@@ -73,7 +73,7 @@ class MovieDetailVC: UIViewController {
         NSLayoutConstraint.activate([
             backdropImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             backdropImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backdropImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backdropImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             backdropImageView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6)
         ])
     }
