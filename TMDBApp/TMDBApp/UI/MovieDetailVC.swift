@@ -159,7 +159,7 @@ class MovieDetailVC: UIViewController {
         self.backdropImageView.sd_setImage(with: movie.backDropURL, placeholderImage: UIImage(named: "placeHolder"), options: .refreshCached)
 
         self.titleLabel.text = movie.title
-        self.overviewLabel.text = movie.overview
+        self.overviewLabel.text = "Description: \(movie.overview)"
         
         let attributeString = NSMutableAttributedString(string: "Revenue: \(movie.revenue ?? 0)", attributes: [
             NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16, weight: .medium),
