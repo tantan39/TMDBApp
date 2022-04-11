@@ -179,28 +179,7 @@ class ViewControllerTests: XCTestCase {
     
 }
 
-extension ViewController {
-    func cellForRowAt(row: Int, section: Section) -> UITableViewCell? {
-        tableView.cellForRow(at: IndexPath(row: row, section: section.hashValue))
-    }
-    
-    func simulateLoadMore() {
-        let scrollView = DraggingScrollView()
-        scrollView.contentOffset.y = 1000
-        scrollViewDidScroll(scrollView)
-    }
-    
-    func simulateItemVisible(at index: Int, section: Section) -> UITableViewCell? {
-        let cell = self.datasource.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: section.rawValue))
-        
-        let delegate = tableView.delegate
-        let indexPath = IndexPath(item: index, section: section.hashValue)
-        delegate?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
-        return cell
-    }
-}
-
-private class DraggingScrollView: UIScrollView {
+class DraggingScrollView: UIScrollView {
     override var isDragging: Bool {
         return true
     }

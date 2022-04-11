@@ -15,6 +15,7 @@
 		B47169912801ECD100DA61A1 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169902801ECD100DA61A1 /* UIView+Extension.swift */; };
 		B47169932801FD1C00DA61A1 /* ImageDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169922801FD1C00DA61A1 /* ImageDataLoader.swift */; };
 		B47169A228031B3200DA61A1 /* ViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169A128031B3200DA61A1 /* ViewControllerTests.swift */; };
+		B47169A42803BE1C00DA61A1 /* ViewControllerTestHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169A32803BE1C00DA61A1 /* ViewControllerTestHelpers.swift */; };
 		B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */; };
 		B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */; };
 		B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */; };
@@ -45,6 +46,7 @@
 		B47169922801FD1C00DA61A1 /* ImageDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataLoader.swift; sourceTree = "<group>"; };
 		B471699828031A4F00DA61A1 /* TMDBAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TMDBAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B47169A128031B3200DA61A1 /* ViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTests.swift; sourceTree = "<group>"; };
+		B47169A32803BE1C00DA61A1 /* ViewControllerTestHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerTestHelpers.swift; sourceTree = "<group>"; };
 		B4856E0727FFBC9E0081C7F3 /* TMDBApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TMDBApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				B47169A128031B3200DA61A1 /* ViewControllerTests.swift */,
+				B47169A32803BE1C00DA61A1 /* ViewControllerTestHelpers.swift */,
 			);
 			path = TMDBAppTests;
 			sourceTree = "<group>";
@@ -262,6 +265,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B47169A42803BE1C00DA61A1 /* ViewControllerTestHelpers.swift in Sources */,
 				B47169A228031B3200DA61A1 /* ViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
