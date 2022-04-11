@@ -35,11 +35,13 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
             let cell = controller.view(in: tableView, forItemAt: indexPath)
             cell.poster.image = nil
             cell.isShimmering = true
-            self.tasks[indexPath] = self.imageLoader?.loadImageData(from: controller.posterURL) { [weak cell] result in
-                let data = try? result.get()
-                DispatchQueue.main.async {
-                    cell?.isShimmering = false
-                    cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
+            if let url = controller.posterURL {
+                self.tasks[indexPath] = self.imageLoader?.loadImageData(from: url) { [weak cell] result in
+                    let data = try? result.get()
+                    DispatchQueue.main.async {
+                        cell?.isShimmering = false
+                        cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
+                    }
                 }
             }
             return cell
@@ -98,8 +100,8 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-        tasks[indexPath] = imageLoader?.loadImageData(from: controller.posterURL, completion: { _ in })
+        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
+        tasks[indexPath] = imageLoader?.loadImageData(from: url, completion: { _ in })
     }
     
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -109,8 +111,8 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
 
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-            tasks[indexPath] = imageLoader?.loadImageData(from: controller.posterURL, completion: { _ in })
+            guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
+            tasks[indexPath] = imageLoader?.loadImageData(from: url, completion: { _ in })
         }
     }
     

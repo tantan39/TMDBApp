@@ -80,8 +80,8 @@ struct MovieCellController {
         self.description = description
     }
     
-    var posterURL: URL {
-        let url = URL(string: "\(ROOT_IMAGE)w500/\(pathImage)")!
+    var posterURL: URL? {
+        let url = URL(string: "\(ROOT_IMAGE)w500/\(pathImage)")
         return url
     }
     
