@@ -7,38 +7,6 @@
 
 import Foundation
 
-enum Error: Swift.Error {
-    case invalidData
-    case connectionError
-}
-
-protocol HTTPClient {
-    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void)
-}
-
-class URLSessionHTTPClient: HTTPClient {
-    private let session: URLSession
-    
-    init(session: URLSession) {
-        self.session = session
-    }
-        
-    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void) {
-        session.dataTask(with: url) { data, response, error in
-            completion(Result {
-              if let error = error {
-                throw error
-              } else if let data = data, let response = response as? HTTPURLResponse {
-                return (data, response)
-              } else {
-                  throw Error.connectionError
-              }
-            })
-        }
-        .resume()
-    }
-}
-
 class FeedAPIService: FeedLoader {
     private let httpClient: HTTPClient
     init(httpClient: HTTPClient) {
