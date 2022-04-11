@@ -10,42 +10,42 @@ import XCTest
 class ViewControllerTests: XCTestCase {
 
     func test_init_emptyList() {
-        let (viewController, _) = makeSUT()
-        let snapshot = viewController.datasource.snapshot()
+        let (sut, _) = makeSUT()
+        let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 0)
         XCTAssertEqual(snapshot.numberOfItems, 0)
     }
     
     func test_viewDidLoad_fetchMovies() {
-        let (viewController, loader) = makeSUT()
+        let (sut, loader) = makeSUT()
         let movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
         
-        viewController.loadViewIfNeeded()
+        sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
         
-        let snapshot = viewController.datasource.snapshot()
+        let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 2)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .loadMore), 1)
     }
     
     func test_fetchMovies_renderingCells() throws {
-        let (viewController, loader) = makeSUT()
+        let (sut, loader) = makeSUT()
         let movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
         
-        viewController.loadViewIfNeeded()
+        sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
-        let snapshot = viewController.datasource.snapshot()
+        let snapshot = sut.datasource.snapshot()
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
             
-            let cell = controller.view(in: viewController.tableView, forItemAt: IndexPath(row: index, section: 0))
+            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
             
             XCTAssertEqual(controller.title, item.title)
             XCTAssertEqual(controller.description, item.overview)
@@ -57,28 +57,28 @@ class ViewControllerTests: XCTestCase {
     }
     
     func test_fetchMovies_failure_renderingEmpty() throws {
-        let (viewController, loader) = makeSUT()
+        let (sut, loader) = makeSUT()
         
-        viewController.loadViewIfNeeded()
+        sut.loadViewIfNeeded()
         loader.completeWithError(.invalidData, at: 0)
         
-        let snapshot = viewController.datasource.snapshot()
+        let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems, 0)
         XCTAssertEqual(snapshot.numberOfSections, 0)
     }
     
     func test_scrollToLastItem_renderingLoadMoreCell() throws {
-        let (viewController, loader) = makeSUT()
+        let (sut, loader) = makeSUT()
         let movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
         
-        viewController.loadViewIfNeeded()
+        sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
-        viewController.simulateLoadMore()
+        sut.simulateLoadMore()
 
-        let _ = try? XCTUnwrap(viewController.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
+        let _ = try? XCTUnwrap(sut.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
     }
     
     func test_tableView_loadMoreSuccess_responseListItem() throws {
