@@ -67,7 +67,7 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfSections, 0)
     }
     
-    func test_tableView_loadMoreSuccess() throws {
+    func test_tableView_loadMoreSuccess_responseListItem() throws {
         let (sut, loader) = makeSUT()
         var movies = [
             makeMovieItem(id: 0),
@@ -81,6 +81,38 @@ class ViewControllerTests: XCTestCase {
         let nextPageItem = makeMovieItem(id: 2)
         loader.complete(with: [nextPageItem])
         movies.append(nextPageItem)
+
+        let snapshot = sut.datasource.snapshot()
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
+        
+        for (index, item) in movies.enumerated() {
+            let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
+            
+            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
+            
+            XCTAssertEqual(controller.title, item.title)
+            XCTAssertEqual(controller.description, item.overview)
+            XCTAssertEqual(controller.pathImage, item.poster_path)
+            
+            XCTAssertEqual(cell.titleLabel.text, item.title)
+            XCTAssertEqual(cell.descriptionLabel.text, item.overview)
+        }
+    }
+    
+    func test_tableView_loadMoreSuccess_reponseEmptyList() throws {
+        let (sut, loader) = makeSUT()
+        var movies = [
+            makeMovieItem(id: 0),
+            makeMovieItem(id: 1, title: "another title", overView: "another overview")
+        ]
+        
+        sut.loadViewIfNeeded()
+        loader.complete(with: movies)
+        
+        sut.simulateLoadMore()
+        let nextPageItems: [Movie] = []
+        loader.complete(with: nextPageItems)
+        movies.append(contentsOf: nextPageItems)
 
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
