@@ -148,7 +148,7 @@ class ViewControllerTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT() -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
-        let feedService = FeedAPIService()
+        let feedService = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
         let viewController = ViewController(apiService: loader, imageLoader: feedService)
         return (viewController, loader)
     }

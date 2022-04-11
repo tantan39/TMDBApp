@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func makeViewController() -> ViewController {
-        let service = FeedAPIService()
+        let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
         let vc = ViewController(apiService: service, imageLoader: service) { [weak self] id in
             guard let self = self else { return }
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)

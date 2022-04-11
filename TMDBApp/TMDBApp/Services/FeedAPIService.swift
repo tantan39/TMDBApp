@@ -12,8 +12,38 @@ enum Error: Swift.Error {
     case connectionError
 }
 
+protocol HTTPClient {
+    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void)
+}
+
+class URLSessionHTTPClient: HTTPClient {
+    private let session: URLSession
+    
+    init(session: URLSession) {
+        self.session = session
+    }
+        
+    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void) {
+        session.dataTask(with: url) { data, response, error in
+            completion(Result {
+              if let error = error {
+                throw error
+              } else if let data = data, let response = response as? HTTPURLResponse {
+                return (data, response)
+              } else {
+                  throw Error.connectionError
+              }
+            })
+        }
+        .resume()
+    }
+}
+
 class FeedAPIService: FeedLoader {
-    private let session = URLSession(configuration: .default)
+    private let httpClient: HTTPClient
+    init(httpClient: HTTPClient) {
+        self.httpClient = httpClient
+    }
     
     private struct RootItem: Decodable {
         let page: Int
@@ -21,49 +51,50 @@ class FeedAPIService: FeedLoader {
     }
     
     func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
-        let request = URL(string: Endpoint.popularMovies(page))!
-        print(request.absoluteURL)
-        session.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let data = data {
+        let url = URL(string: Endpoint.popularMovies(page))!
+        
+        print(url.absoluteURL)
+        httpClient.get(url: url) { response in
+            switch response {
+            case let .success((data, _)):
+                DispatchQueue.main.async {
                     if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
                         completion(.success(root.results))
                     } else {
                         completion(.failure(.invalidData))
                     }
-                } else {
-                    completion(.failure(.connectionError))
                 }
+            case .failure:
+                completion(.failure(.connectionError))
             }
         }
-        .resume()
+
     }
     
     func getMovieDetail(_ id: Int, completion: @escaping (Result<Movie, Error>) -> Void) {
         let request = URL(string: Endpoint.details(id))!
-        session.dataTask(with: request) { data, response, error in
-            DispatchQueue.main.async {
-                if let data = data {
+        httpClient.get(url: request) { response in
+            switch response {
+            case let .success((data, _)):
+                DispatchQueue.main.async {
                     if let movie = try? JSONDecoder().decode(Movie.self, from: data) {
                         completion(.success(movie))
                     } else {
                         completion(.failure(.invalidData))
                     }
-                } else {
-                    completion(.failure(.connectionError))
                 }
+            default:
+                completion(.failure(.connectionError))
             }
         }
-        .resume()
     }
 }
 
 extension FeedAPIService: ImageDataLoader {
-    
     func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask {
         let task = URLSessionTaskWrapper()
         
-        task.wrapped = session.dataTask(with: url) { data, response, error in
+        task.wrapped = URLSession(configuration: .default).dataTask(with: url) { data, response, error in
             if let data = data {
                 completion(.success(data))
             }
