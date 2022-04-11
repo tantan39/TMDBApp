@@ -24,7 +24,7 @@ class FeedAPIService: FeedLoader {
         print(url.absoluteURL)
         httpClient.get(url: url) { response in
             switch response {
-            case let .success((data, _)):
+            case let .success(data):
                 DispatchQueue.main.async {
                     if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
                         completion(.success(root.results))
@@ -43,7 +43,7 @@ class FeedAPIService: FeedLoader {
         let request = URL(string: Endpoint.details(id))!
         httpClient.get(url: request) { response in
             switch response {
-            case let .success((data, _)):
+            case let .success(data):
                 DispatchQueue.main.async {
                     if let movie = try? JSONDecoder().decode(Movie.self, from: data) {
                         completion(.success(movie))

@@ -14,13 +14,13 @@ class URLSessionHTTPClient: HTTPClient {
         self.session = session
     }
         
-    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void) {
+    func get(url: URL, completion: @escaping (Result<Data, Swift.Error>) -> Void) {
         session.dataTask(with: url) { data, response, error in
             completion(Result {
               if let error = error {
                 throw error
-              } else if let data = data, let response = response as? HTTPURLResponse {
-                return (data, response)
+              } else if let data = data {
+                return data
               } else {
                   throw Error.connectionError
               }

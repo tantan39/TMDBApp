@@ -13,5 +13,5 @@ enum Error: Swift.Error {
 }
 
 protocol HTTPClient {
-    func get(url: URL, completion: @escaping (Result<(data: Data, response: HTTPURLResponse), Swift.Error>) -> Void)
+    func get(url: URL, completion: @escaping (Result<Data, Swift.Error>) -> Void)
 }
