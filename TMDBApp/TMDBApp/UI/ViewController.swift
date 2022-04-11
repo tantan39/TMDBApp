@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum Section {
+enum Section: Int {
     case movie
     case loadMore
 }

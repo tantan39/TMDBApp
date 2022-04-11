@@ -58,13 +58,27 @@ class ViewControllerTests: XCTestCase {
     
     func test_fetchMovies_failure_renderingEmpty() throws {
         let (viewController, loader) = makeSUT()
-
+        
         viewController.loadViewIfNeeded()
         loader.completeWithError(.invalidData, at: 0)
         
         let snapshot = viewController.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems, 0)
         XCTAssertEqual(snapshot.numberOfSections, 0)
+    }
+    
+    func test_scrollToLastItem_renderingLoadMoreCell() throws {
+        let (viewController, loader) = makeSUT()
+        let movies = [
+            makeMovieItem(id: 0),
+            makeMovieItem(id: 1, title: "another title", overView: "another overview")
+        ]
+        
+        viewController.loadViewIfNeeded()
+        loader.complete(with: movies, at: 0)
+        viewController.simulateLoadMore()
+
+        let _ = try? XCTUnwrap(viewController.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
     }
     
     func test_tableView_loadMoreSuccess_responseListItem() throws {
@@ -81,7 +95,7 @@ class ViewControllerTests: XCTestCase {
         let nextPageItem = makeMovieItem(id: 2)
         loader.complete(with: [nextPageItem])
         movies.append(nextPageItem)
-
+        
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
         
@@ -113,7 +127,7 @@ class ViewControllerTests: XCTestCase {
         let nextPageItems: [Movie] = []
         loader.complete(with: nextPageItems)
         movies.append(contentsOf: nextPageItems)
-
+        
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
         
@@ -141,7 +155,7 @@ class ViewControllerTests: XCTestCase {
     
     private func makeMovieItem(id: Int, title: String = "a movie title", overView: String = "a overview") -> Movie {
         Movie(id: id, title: "a movie title", overview: "a overview", poster_path: "poster path", backdrop_path: nil, release_date: nil, revenue: nil)
-
+        
     }
     
     private class FeedServiceSpy: FeedLoader {
@@ -174,6 +188,15 @@ extension ViewController {
         let scrollView = DraggingScrollView()
         scrollView.contentOffset.y = 1000
         scrollViewDidScroll(scrollView)
+    }
+    
+    func simulateItemVisible(at index: Int, section: Section) -> UITableViewCell? {
+        let cell = self.datasource.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: section.rawValue))
+        
+        let delegate = tableView.delegate
+        let indexPath = IndexPath(item: index, section: section.hashValue)
+        delegate?.tableView?(tableView, willDisplay: cell, forRowAt: indexPath)
+        return cell
     }
 }
 
