@@ -24,6 +24,13 @@ class MovieCell: UITableViewCell {
         return label
     }()
     
+    lazy var favoriteIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(systemName: "star")
+        return imageView
+    }()
+    
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -56,6 +63,14 @@ class MovieCell: UITableViewCell {
             titleLabel.bottomAnchor.constraint(equalTo: poster.bottomAnchor, constant: -16),
         ])
         
+        addSubview(favoriteIcon)
+        NSLayoutConstraint.activate([
+            favoriteIcon.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            favoriteIcon.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            favoriteIcon.widthAnchor.constraint(equalToConstant: 30),
+            favoriteIcon.heightAnchor.constraint(equalToConstant: 30),
+        ])
+        
         addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -67,17 +82,19 @@ class MovieCell: UITableViewCell {
 }
 
 
-struct MovieCellController {
+class MovieCellController {
     let id: Int
     let title: String
     let pathImage: String
     let description: String
+    var favorited: Bool
     
-    internal init(id: Int, title: String, pathImage: String, description: String) {
+    internal init(id: Int, title: String, pathImage: String, description: String, favorited: Bool) {
         self.id = id
         self.title = title
         self.pathImage = pathImage
         self.description = description
+        self.favorited = favorited
     }
     
     var posterURL: URL? {
@@ -89,6 +106,7 @@ struct MovieCellController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
         cell.titleLabel.text = self.title
         cell.descriptionLabel.text = self.description
+        cell.favoriteIcon.image = self.favorited ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         return cell
     }
@@ -98,4 +116,9 @@ extension MovieCellController: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
+    
+    static func == (lhs: MovieCellController,
+                        rhs: MovieCellController) -> Bool {
+        lhs.id == rhs.id
+        }
 }

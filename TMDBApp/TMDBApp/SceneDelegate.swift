@@ -6,11 +6,18 @@
 //
 
 import UIKit
+
+class AppCenter: NSObject {
+    static let shared = AppCenter()
+    var favoriteItem: FavoriteItem?
+}
+
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     private var navController: UINavigationController?
-
+    var viewController: ViewController?
+    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
@@ -21,14 +28,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = self.navController
         window?.makeKeyAndVisible()
     }
-
+    
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
-        let vc = ViewController(apiService: service, imageLoader: service) { [weak self] id in
-            guard let self = self else { return }
-            self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
+        self.viewController = ViewController(apiService: service, imageLoader: service) { id in
+//            guard let self = self else { return }
+            self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id, didFavorited: { item in
+                AppCenter.shared.favoriteItem = item
+            }), animated: true)
         }
-        return vc
+        
+        return self.viewController ?? ViewController()
     }
 
 }

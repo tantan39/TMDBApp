@@ -65,6 +65,18 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
         fetchMovies()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if let item = AppCenter.shared.favoriteItem {
+            var snapShot = self.datasource.snapshot()
+            if let controllers = snapShot.itemIdentifiers(inSection: Section.movie) as? [MovieCellController], let controller = controllers.first(where: { $0.id == item.id }) {
+                controller.favorited = true
+
+                snapShot.reloadItems([controller])
+                self.datasource.apply(snapShot, animatingDifferences: true, completion: nil)
+            }
+        }
+    }
 
     private func set(_ newItems: [MovieCellController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
@@ -90,7 +102,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
                 let controllers = movies.map { MovieCellController(id: $0.id,
                                                                    title: $0.title,
                                                                    pathImage: $0.poster_path,
-                                                                   description: $0.overview) }
+                                                                   description: $0.overview, favorited: false) }
                 self.page == 1 ? self.set(controllers) : self.append(controllers)
                 
             default:
