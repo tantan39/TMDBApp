@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 class FeedAPIService: FeedLoader {
     private let httpClient: HTTPClient
@@ -18,24 +19,42 @@ class FeedAPIService: FeedLoader {
         let results: [Movie]
     }
     
-    func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
+    func fetchPopularMovies(page: Int) -> AnyPublisher<[Movie], Error> {
         let url = URL(string: Endpoint.popularMovies(page))!
         
         print(url.absoluteURL)
-        httpClient.get(url: url) { response in
-            switch response {
-            case let .success(data):
-                DispatchQueue.main.async {
-                    if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
-                        completion(.success(root.results))
-                    } else {
-                        completion(.failure(.invalidData))
+//        httpClient.get(url: url) { response in
+//            switch response {
+//            case let .success(data):
+//                DispatchQueue.main.async {
+//                    if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
+//                        completion(.success(root.results))
+//                    } else {
+//                        completion(.failure(.invalidData))
+//                    }
+//                }
+//            case .failure:
+//                completion(.failure(.connectionError))
+//            }
+//        }
+        
+        return Deferred {
+            Future() { promise in
+                self.httpClient.get(url: url) { response in
+                    switch response {
+                    case let .success(data):
+                        if let root = try? JSONDecoder().decode(RootItem.self, from: data) {
+                            promise(.success(root.results))
+                        } else {
+                            promise(.failure(.invalidData))
+                        }
+                    case .failure:
+                        promise(.failure(.invalidData))
                     }
                 }
-            case .failure:
-                completion(.failure(.connectionError))
             }
         }
+        .eraseToAnyPublisher()
 
     }
     

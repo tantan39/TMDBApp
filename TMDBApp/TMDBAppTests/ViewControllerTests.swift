@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Combine
 @testable import TMDBApp
 class ViewControllerTests: XCTestCase {
 
@@ -159,18 +160,25 @@ class ViewControllerTests: XCTestCase {
     }
     
     private class FeedServiceSpy: FeedLoader {
-        var messages: [(Result<[Movie], Error>) -> Void] = []
         
-        func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
-            messages.append(completion)
+        var messages: [PassthroughSubject<[Movie], Error>] = []
+        
+//        func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
+//            messages.append(completion)
+//        }
+        func fetchPopularMovies(page: Int) -> AnyPublisher<[Movie], Error> {
+            let publisher = PassthroughSubject<[Movie], Error>()
+            messages.append(publisher)
+            return publisher.eraseToAnyPublisher()
         }
         
         func complete(with items: [Movie], at index: Int = 0) {
-            messages[index](.success(items))
+            messages[index].send(items)
+            messages[index].send(completion: .finished)
         }
         
         func completeWithError(_ error: Error, at index: Int = 0) {
-            messages[index](.failure(error))
+            messages[index].send(completion: .failure(error))
         }
         
         func getMovieDetail(_ id: Int, completion: @escaping (Result<Movie, Error>) -> Void) { }

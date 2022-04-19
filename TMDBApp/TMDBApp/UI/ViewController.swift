@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 enum Section: Int {
     case movie
@@ -21,6 +22,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var apiService: FeedLoader?
     private var imageLoader: ImageDataLoader?
     private var onSelected: ((Int) -> Void)?
+    private var cancellables = Set<AnyCancellable>()
     
     convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, onSelected: ((Int) -> Void)? = { _ in }) {
         self.init()
@@ -94,21 +96,33 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     private func fetchMovies(_ page: Int = 1) {
         self.page = page
-        apiService?.fetchPopularMovies(page: page) { [weak self] result in
-            guard let self = self else { return }
-            self.isLoadMore = false
-            switch result {
-            case let .success(movies):
+//        apiService?.fetchPopularMovies(page: page) { [weak self] result in
+//            guard let self = self else { return }
+//            self.isLoadMore = false
+//            switch result {
+//            case let .success(movies):
+//                let controllers = movies.map { MovieCellController(id: $0.id,
+//                                                                   title: $0.title,
+//                                                                   pathImage: $0.poster_path,
+//                                                                   description: $0.overview, favorited: false) }
+//                self.page == 1 ? self.set(controllers) : self.append(controllers)
+//
+//            default:
+//                break
+//            }
+//        }
+        apiService?.fetchPopularMovies(page: page)
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { error in
+                
+            }, receiveValue: { movies in
                 let controllers = movies.map { MovieCellController(id: $0.id,
                                                                    title: $0.title,
                                                                    pathImage: $0.poster_path,
                                                                    description: $0.overview, favorited: false) }
                 self.page == 1 ? self.set(controllers) : self.append(controllers)
-                
-            default:
-                break
-            }
-        }
+            })
+            .store(in: &cancellables)
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

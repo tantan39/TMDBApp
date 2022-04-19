@@ -7,28 +7,36 @@
 
 import Foundation
 import XCTest
+import Combine
+
 @testable import TMDBApp
 
 class FeedAPIServiceTests: XCTestCase {
+    private var cancellables = Set<AnyCancellable>()
     func test_fetchPopularMovies_responseJSONEmptyList() {
         let client = HTTPClientSpy()
         let sut = FeedAPIService(httpClient: client)
         
-        let exp = expectation(description: "Wait for loading")
-        sut.fetchPopularMovies(page: 1) { response in
-            switch response {
-            case let .success(items):
+//        let exp = expectation(description: "Wait for loading")
+//        sut.fetchPopularMovies(page: 1) { response in
+//            switch response {
+//            case let .success(items):
+//                XCTAssertTrue(items.isEmpty)
+//            case .failure:
+//                XCTFail("Failure")
+//            }
+//            exp.fulfill()
+//        }
+        sut.fetchPopularMovies(page: 1)
+            .sink(receiveCompletion: { _ in }, receiveValue: { items in
                 XCTAssertTrue(items.isEmpty)
-            case .failure:
-                XCTFail("Failure")
-            }
-            exp.fulfill()
-        }
+            })
+            .store(in: &cancellables)
         
         let emptyPage = makeListMovie(items: [])
         let json = makeItemsJSONData(for: emptyPage.json)
         client.completeWith(data: json)
-        wait(for: [exp], timeout: 2.0)
+//        wait(for: [exp], timeout: 2.0)
     }
     
     func test_fetchPopularMovies_responseJSONMovieList() {
@@ -40,25 +48,36 @@ class FeedAPIServiceTests: XCTestCase {
         let feed = makeListMovie(items: expectedItems)
         let json = makeItemsJSONData(for: feed.json)
         
-        let exp = expectation(description: "Wait for loading")
-        sut.fetchPopularMovies(page: 1) { response in
-            switch response {
-            case let .success(items):
-                
+//        let exp = expectation(description: "Wait for loading")
+//        sut.fetchPopularMovies(page: 1) { response in
+//            switch response {
+//            case let .success(items):
+//
+//                for (index, movie) in items.enumerated() {
+//                    XCTAssertEqual(movie.id, expectedItems[index].model.id)
+//                    XCTAssertEqual(movie.title, expectedItems[index].model.title)
+//                    XCTAssertEqual(movie.overview, expectedItems[index].model.overview)
+//
+//                }
+//            case .failure:
+//                XCTFail("Failure")
+//            }
+//            exp.fulfill()
+//        }
+        
+        sut.fetchPopularMovies(page: 1)
+            .sink(receiveCompletion: { _ in }, receiveValue: { items in
                 for (index, movie) in items.enumerated() {
                     XCTAssertEqual(movie.id, expectedItems[index].model.id)
                     XCTAssertEqual(movie.title, expectedItems[index].model.title)
                     XCTAssertEqual(movie.overview, expectedItems[index].model.overview)
 
                 }
-            case .failure:
-                XCTFail("Failure")
-            }
-            exp.fulfill()
-        }
+            })
+            .store(in: &cancellables)
         
         client.completeWith(data: json)
-        wait(for: [exp], timeout: 2.0)
+//        wait(for: [exp], timeout: 2.0)
     }
     
     class HTTPClientSpy: HTTPClient {
