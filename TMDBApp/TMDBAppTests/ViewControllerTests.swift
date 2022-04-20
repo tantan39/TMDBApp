@@ -23,135 +23,136 @@ class ViewControllerTests: XCTestCase {
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
-        
+
         sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
-        
+
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfSections, 2)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .loadMore), 1)
     }
-    
+
     func test_fetchMovies_renderingCells() throws {
         let (sut, loader) = makeSUT()
         let movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
-        
+
         sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
-                
+
         let snapshot = sut.datasource.snapshot()
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
-            
+
             let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
-            
+
             XCTAssertEqual(controller.title, item.title)
             XCTAssertEqual(controller.description, item.overview)
             XCTAssertEqual(controller.pathImage, item.poster_path)
-            
+
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
         }
     }
-    
+
     func test_fetchMovies_failure_renderingEmpty() throws {
         let (sut, loader) = makeSUT()
-        
+
         sut.loadViewIfNeeded()
         loader.completeWithError(.invalidData, at: 0)
-        
+
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems, 0)
         XCTAssertEqual(snapshot.numberOfSections, 0)
     }
-    
+
     func test_scrollToLastItem_renderingLoadMoreCell() throws {
         let (sut, loader) = makeSUT()
         let movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
-        
+
         sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
         sut.simulateLoadMore()
 
         let _ = try? XCTUnwrap(sut.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
     }
-    
+
     func test_tableView_loadMoreSuccess_responseListItem() throws {
         let (sut, loader) = makeSUT()
         var movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
-        
+
         sut.loadViewIfNeeded()
         loader.complete(with: movies)
-        
+
         sut.simulateLoadMore()
         let nextPageItem = makeMovieItem(id: 2)
         loader.complete(with: [nextPageItem], at: 1)
         movies.append(nextPageItem)
-        
+
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
-        
+
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
-            
+
             let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
-            
+
             XCTAssertEqual(controller.title, item.title)
             XCTAssertEqual(controller.description, item.overview)
             XCTAssertEqual(controller.pathImage, item.poster_path)
-            
+
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
         }
     }
-    
+
     func test_tableView_loadMoreSuccess_reponseEmptyList() throws {
         let (sut, loader) = makeSUT()
         var movies = [
             makeMovieItem(id: 0),
             makeMovieItem(id: 1, title: "another title", overView: "another overview")
         ]
-        
+
         sut.loadViewIfNeeded()
         loader.complete(with: movies)
-        
+
         sut.simulateLoadMore()
         let nextPageItems: [Movie] = []
         loader.complete(with: nextPageItems)
         movies.append(contentsOf: nextPageItems)
-        
+
         let snapshot = sut.datasource.snapshot()
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
-        
+
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
-            
+
             let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
-            
+
             XCTAssertEqual(controller.title, item.title)
             XCTAssertEqual(controller.description, item.overview)
             XCTAssertEqual(controller.pathImage, item.poster_path)
-            
+
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
         }
     }
     
     // MARK: - Helpers
-    private func makeSUT() -> (sut: ViewController, loader: FeedServiceSpy) {
+    private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
         let feedService = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
         let viewController = ViewController(apiService: loader, imageLoader: feedService)
+        trackMemoryLeaks(viewController, file: file, line: line)
         return (viewController, loader)
     }
     
@@ -188,5 +189,13 @@ class ViewControllerTests: XCTestCase {
 class DraggingScrollView: UIScrollView {
     override var isDragging: Bool {
         return true
+    }
+}
+
+extension XCTestCase {
+    func trackMemoryLeaks(_ instance: AnyObject, file: StaticString = #filePath, line: UInt = #line) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been dellocated. Potential memory leak", file: file, line: line)
+        }
     }
 }

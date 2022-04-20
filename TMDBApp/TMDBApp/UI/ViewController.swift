@@ -31,16 +31,16 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.onSelected = onSelected
     }
     
-    lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { tableView, indexPath, controller in
+    lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { [weak self] tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
             cell.poster.image = nil
             cell.isShimmering = true
             if let url = controller.posterURL {
-                self.tasks[indexPath] = self.imageLoader?.loadImageData(from: url) { [weak cell] result in
+                self?.tasks[indexPath] = self?.imageLoader?.loadImageData(from: url) { [weak cell] result in
                     let data = try? result.get()
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [weak self] in
                         cell?.isShimmering = false
                         cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
                     }
