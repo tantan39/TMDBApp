@@ -96,26 +96,13 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     private func fetchMovies(_ page: Int = 1) {
         self.page = page
-//        apiService?.fetchPopularMovies(page: page) { [weak self] result in
-//            guard let self = self else { return }
-//            self.isLoadMore = false
-//            switch result {
-//            case let .success(movies):
-//                let controllers = movies.map { MovieCellController(id: $0.id,
-//                                                                   title: $0.title,
-//                                                                   pathImage: $0.poster_path,
-//                                                                   description: $0.overview, favorited: false) }
-//                self.page == 1 ? self.set(controllers) : self.append(controllers)
-//
-//            default:
-//                break
-//            }
-//        }
+        
         apiService?.fetchPopularMovies(page: page)
-            .receive(on: DispatchQueue.main)
+            .dispatchOnMainQueue()
             .sink(receiveCompletion: { error in
                 
-            }, receiveValue: { movies in
+            }, receiveValue: { [weak self] movies in
+                guard let self = self else { return }
                 let controllers = movies.map { MovieCellController(id: $0.id,
                                                                    title: $0.title,
                                                                    pathImage: $0.poster_path,
@@ -170,4 +157,3 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.onSelected?(controller.id)
     }
 }
-

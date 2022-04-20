@@ -42,6 +42,7 @@ class ViewControllerTests: XCTestCase {
         
         sut.loadViewIfNeeded()
         loader.complete(with: movies, at: 0)
+                
         let snapshot = sut.datasource.snapshot()
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
@@ -94,7 +95,7 @@ class ViewControllerTests: XCTestCase {
         
         sut.simulateLoadMore()
         let nextPageItem = makeMovieItem(id: 2)
-        loader.complete(with: [nextPageItem])
+        loader.complete(with: [nextPageItem], at: 1)
         movies.append(nextPageItem)
         
         let snapshot = sut.datasource.snapshot()
@@ -161,11 +162,8 @@ class ViewControllerTests: XCTestCase {
     
     private class FeedServiceSpy: FeedLoader {
         
-        var messages: [PassthroughSubject<[Movie], Error>] = []
-        
-//        func fetchPopularMovies(page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {
-//            messages.append(completion)
-//        }
+        private var messages: [PassthroughSubject<[Movie], Error>] = []
+
         func fetchPopularMovies(page: Int) -> AnyPublisher<[Movie], Error> {
             let publisher = PassthroughSubject<[Movie], Error>()
             messages.append(publisher)
