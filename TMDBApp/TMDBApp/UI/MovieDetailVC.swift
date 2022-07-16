@@ -8,11 +8,6 @@
 import Foundation
 import UIKit
 
-struct FavoriteItem {
-    let id: Int
-    let status: Bool
-}
-
 class MovieDetailVC: UIViewController {
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -58,7 +53,7 @@ class MovieDetailVC: UIViewController {
         let button = UIButton()
 //        button.setTitle("Favorite", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(favoriteButtonTapped), for: .touchUpInside)
         button.setImage(UIImage(systemName: "star"), for: .normal)
         return button
     }()
@@ -76,22 +71,12 @@ class MovieDetailVC: UIViewController {
     private var apiService: FeedLoader?
     private var imageLoader: ImageDataLoader?
     private var task: ImageDataLoaderTask?
-    
-    var isFavorited: Bool = false {
-        didSet {
-            let icon = isFavorited ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
-            favoriteButton.setImage(icon, for: .normal)
-        }
-    }
-    
-    var favoriteButtonOnClick: ((FavoriteItem) -> Void)?
-    
-    convenience init(service: FeedLoader, imageLoader: ImageDataLoader, movieID: Int, didFavorited: ((FavoriteItem) -> Void)?) {
+        
+    convenience init(service: FeedLoader, imageLoader: ImageDataLoader, movieID: Int) {
         self.init()
         self.apiService = service
         self.imageLoader = imageLoader
         self.movieID = movieID
-        self.favoriteButtonOnClick = didFavorited
     }
     
     override func viewDidLoad() {
@@ -109,7 +94,6 @@ class MovieDetailVC: UIViewController {
         setupContainerView()
         setupBackdrop()
         setupTitle()
-        setupFavoriteButton()
         setupOverviewLabel()
         setupDetailLabel()
     }
@@ -154,16 +138,6 @@ class MovieDetailVC: UIViewController {
         ])
     }
     
-    private func setupFavoriteButton() {
-        containerView.addSubview(favoriteButton)
-        NSLayoutConstraint.activate([
-            favoriteButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -8),
-            favoriteButton.topAnchor.constraint(equalTo: titleLabel.topAnchor),
-            favoriteButton.heightAnchor.constraint(equalToConstant: 30),
-            favoriteButton.widthAnchor.constraint(equalToConstant: 100),
-        ])
-    }
-    
     private func setupOverviewLabel() {
         containerView.addSubview(overviewLabel)
         NSLayoutConstraint.activate([
@@ -181,15 +155,6 @@ class MovieDetailVC: UIViewController {
             detailsLabel.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 20),
             detailsLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -60)
         ])
-    }
-    
-    @objc func favoriteButtonTapped() {
-        guard let movieID = movieID else {
-            return
-        }
-        favoriteButton.setImage(UIImage(systemName: "star.fill"), for: .normal)
-        let item = FavoriteItem(id: movieID, status: true)
-        self.favoriteButtonOnClick?(item)
     }
     
     private func getDetail() {

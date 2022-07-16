@@ -63,14 +63,6 @@ class MovieCell: UITableViewCell {
             titleLabel.bottomAnchor.constraint(equalTo: poster.bottomAnchor, constant: -16),
         ])
         
-        addSubview(favoriteIcon)
-        NSLayoutConstraint.activate([
-            favoriteIcon.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
-            favoriteIcon.bottomAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            favoriteIcon.widthAnchor.constraint(equalToConstant: 30),
-            favoriteIcon.heightAnchor.constraint(equalToConstant: 30),
-        ])
-        
         addSubview(descriptionLabel)
         NSLayoutConstraint.activate([
             descriptionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor),
@@ -87,14 +79,12 @@ class MovieCellController {
     let title: String
     let pathImage: String
     let description: String
-    var favorited: Bool
     
-    internal init(id: Int, title: String, pathImage: String, description: String, favorited: Bool) {
+    internal init(id: Int, title: String, pathImage: String, description: String) {
         self.id = id
         self.title = title
         self.pathImage = pathImage
         self.description = description
-        self.favorited = favorited
     }
     
     var posterURL: URL? {
@@ -106,7 +96,6 @@ class MovieCellController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
         cell.titleLabel.text = self.title
         cell.descriptionLabel.text = self.description
-        cell.favoriteIcon.image = self.favorited ? UIImage(systemName: "star.fill") : UIImage(systemName: "star")
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         return cell
     }
