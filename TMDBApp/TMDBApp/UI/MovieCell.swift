@@ -75,39 +75,57 @@ class MovieCell: UITableViewCell {
 
 
 class MovieCellController {
-    let id: Int
-    let title: String
-    let pathImage: String
-    let description: String
+    private let movie: Movie
+    private let imageLoader: ImageDataLoader
+    private var task: ImageDataLoaderTask?
     
-    internal init(id: Int, title: String, pathImage: String, description: String) {
-        self.id = id
-        self.title = title
-        self.pathImage = pathImage
-        self.description = description
+    internal init(movie: Movie, imageLoader: ImageDataLoader) {
+        self.movie = movie
+        self.imageLoader = imageLoader
     }
     
     var posterURL: URL? {
-        let url = URL(string: "\(ROOT_IMAGE)w500/\(pathImage)")
+        let url = URL(string: "\(ROOT_IMAGE)w500/\(self.movie.poster_path)")
         return url
     }
     
     func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> MovieCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
-        cell.titleLabel.text = self.title
-        cell.descriptionLabel.text = self.description
+        cell.titleLabel.text = self.movie.title
+        cell.descriptionLabel.text = self.movie.overview
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
+        cell.poster.image = nil
+        cell.isShimmering = true
+        if let url = posterURL {
+            self.task = self.imageLoader.loadImageData(from: url) { [weak cell] result in
+                let data = try? result.get()
+                DispatchQueue.main.async { [weak cell] in
+                    cell?.isShimmering = false
+                    cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
+                }
+            }
+        }
         return cell
+    }
+    
+    func preload() {
+        if let url = posterURL {
+            self.task = self.imageLoader.loadImageData(from: url, completion: { _ in })
+        }
+    }
+    
+    deinit {
+        task?.cancel()
     }
 }
 
 extension MovieCellController: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+        hasher.combine(movie.id)
     }
-    
+
     static func == (lhs: MovieCellController,
                         rhs: MovieCellController) -> Bool {
-        lhs.id == rhs.id
+        lhs.movie.id == rhs.movie.id
         }
 }

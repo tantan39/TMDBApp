@@ -33,10 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         refreshViewController.onRefresh = { [weak vc] movies in
-            let controllers = movies.map { MovieCellController(id: $0.id,
-                                                               title: $0.title,
-                                                               pathImage: $0.poster_path,
-                                                               description: $0.overview) }
+            let controllers = movies.map { MovieCellController(movie: $0, imageLoader: service) }
             vc?.set(controllers)
         }
         

@@ -18,7 +18,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var refreshViewController: FeedRefreshViewController?
     private var isLoadMore: Bool = false
     private var page: Int = 1
-    private var tasks = [IndexPath: ImageDataLoaderTask]()
+    private var cellControllers = [IndexPath: MovieCellController]()
     
     private var apiService: FeedLoader?
     private var imageLoader: ImageDataLoader?
@@ -37,17 +37,6 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         switch controller {
         case let controller as MovieCellController:
             let cell = controller.view(in: tableView, forItemAt: indexPath)
-            cell.poster.image = nil
-            cell.isShimmering = true
-            if let url = controller.posterURL {
-                self?.tasks[indexPath] = self?.imageLoader?.loadImageData(from: url) { [weak cell] result in
-                    let data = try? result.get()
-                    DispatchQueue.main.async { [weak self] in
-                        cell?.isShimmering = false
-                        cell?.poster.setImageAnimated(data.map(UIImage.init) ?? nil)
-                    }
-                }
-            }
             return cell
             
         case let loadMoreController as LoadMoreCellController:
@@ -94,37 +83,30 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
             .sink(receiveCompletion: { error in
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
-                let controllers = movies.map { MovieCellController(id: $0.id,
-                                                                   title: $0.title,
-                                                                   pathImage: $0.poster_path,
-                                                                   description: $0.overview) }
+                let controllers = movies.map { MovieCellController(movie: $0, imageLoader: self.imageLoader!) }
                 self.page == 1 ? self.set(controllers) : self.append(controllers)
             })
             .store(in: &cancellables)
     }
-    
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
-        tasks[indexPath] = imageLoader?.loadImageData(from: url, completion: { _ in })
-    }
+
+//    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+//        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
+//        tasks[indexPath] = imageLoader?.loadImageData(from: url, completion: { _ in })
+//    }
     
     override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        tasks[indexPath]?.cancel()
-        tasks[indexPath] = nil
+        removeCellController(forRowAt: indexPath)
     }
 
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
-            guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
-            tasks[indexPath] = imageLoader?.loadImageData(from: url, completion: { _ in })
+            guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
+            controller.preload()
         }
     }
     
     func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach { indexPath in
-            tasks[indexPath]?.cancel()
-            tasks[indexPath] = nil
-        }
+        indexPaths.forEach { removeCellController(forRowAt: $0) }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -145,6 +127,16 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-        self.onSelected?(controller.id)
+//        self.onSelected?(controller.id)
+    }
+    
+    private func cellController(forRowAt indexPath: IndexPath) -> MovieCellController? {
+        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return nil }
+        cellControllers[indexPath] = controller
+        return controller
+    }
+    
+    private func removeCellController(forRowAt indexPath: IndexPath) {
+        cellControllers[indexPath] = nil
     }
 }
