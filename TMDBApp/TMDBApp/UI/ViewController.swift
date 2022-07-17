@@ -25,11 +25,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var onSelected: ((Int) -> Void)?
     private var cancellables = Set<AnyCancellable>()
     
-    convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, onSelected: ((Int) -> Void)? = { _ in }) {
+    convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, refreshViewController: FeedRefreshViewController, onSelected: ((Int) -> Void)? = { _ in }) {
         self.init()
         self.apiService = apiService
         self.imageLoader = imageLoader
-        self.refreshViewController = FeedRefreshViewController(apiService: apiService)
+        self.refreshViewController = refreshViewController
         self.onSelected = onSelected
     }
     
@@ -68,17 +68,10 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.tableView.register(MovieCell.self, forCellReuseIdentifier: "MovieCell")
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
         
-        self.refreshViewController?.onRefresh = { [weak self] movies in
-            let controllers = movies.map { MovieCellController(id: $0.id,
-                                                               title: $0.title,
-                                                               pathImage: $0.poster_path,
-                                                               description: $0.overview) }
-            self?.set(controllers)
-        }
         self.refreshViewController?.refresh()
     }
 
-    private func set(_ newItems: [MovieCellController]) {
+    func set(_ newItems: [MovieCellController]) {
         var snapshot = NSDiffableDataSourceSnapshot<Section,AnyHashable>()
         snapshot.appendSections([.movie, .loadMore])
         snapshot.appendItems(newItems, toSection: .movie)

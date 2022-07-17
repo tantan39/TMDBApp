@@ -25,9 +25,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
-        let vc = ViewController(apiService: service, imageLoader: service) { [weak self] id in
+        let refreshViewController = FeedRefreshViewController(apiService: service)
+
+        let vc = ViewController(apiService: service, imageLoader: service, refreshViewController: refreshViewController) { [weak self] id in
             guard let self = self else { return }
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
+        }
+        
+        refreshViewController.onRefresh = { [weak vc] movies in
+            let controllers = movies.map { MovieCellController(id: $0.id,
+                                                               title: $0.title,
+                                                               pathImage: $0.poster_path,
+                                                               description: $0.overview) }
+            vc?.set(controllers)
         }
         
         return vc
