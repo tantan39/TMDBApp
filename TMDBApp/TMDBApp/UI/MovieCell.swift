@@ -117,6 +117,10 @@ class MovieCellController {
     deinit {
         task?.cancel()
     }
+    
+    func cancelLoad() {
+        task?.cancel()
+    }
 }
 
 extension MovieCellController: Hashable {

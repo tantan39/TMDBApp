@@ -18,7 +18,6 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var refreshViewController: FeedRefreshViewController?
     private var isLoadMore: Bool = false
     private var page: Int = 1
-    private var cellControllers = [IndexPath: MovieCellController]()
     
     private var apiService: FeedLoader?
     private var imageLoader: ImageDataLoader?
@@ -132,11 +131,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     private func cellController(forRowAt indexPath: IndexPath) -> MovieCellController? {
         guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return nil }
-        cellControllers[indexPath] = controller
         return controller
     }
     
     private func removeCellController(forRowAt indexPath: IndexPath) {
-        cellControllers[indexPath] = nil
+        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
+        controller.cancelLoad()
     }
 }
