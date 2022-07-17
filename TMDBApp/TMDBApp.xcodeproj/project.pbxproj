@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B40146652883A3FD006D6ACB /* FeedRefreshViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */; };
 		B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471697E27FFD8F000DA61A1 /* MovieCell.swift */; };
 		B471698128006F8900DA61A1 /* LoadMoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B471698028006F8800DA61A1 /* LoadMoreCell.swift */; };
 		B47169832800705900DA61A1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47169822800705900DA61A1 /* Movie.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRefreshViewController.swift; sourceTree = "<group>"; };
 		B471697E27FFD8F000DA61A1 /* MovieCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCell.swift; sourceTree = "<group>"; };
 		B471698028006F8800DA61A1 /* LoadMoreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCell.swift; sourceTree = "<group>"; };
 		B47169822800705900DA61A1 /* Movie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				B471697E27FFD8F000DA61A1 /* MovieCell.swift */,
 				B471698028006F8800DA61A1 /* LoadMoreCell.swift */,
 				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
+				B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */,
 				B4716986280074B000DA61A1 /* MovieDetailVC.swift */,
 			);
 			path = UI;
@@ -299,6 +302,7 @@
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
 				B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */,
 				B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */,
+				B40146652883A3FD006D6ACB /* FeedRefreshViewController.swift in Sources */,
 				B47169832800705900DA61A1 /* Movie.swift in Sources */,
 				B4856E1F27FFBCF10081C7F3 /* Constants.swift in Sources */,
 				B47169852800708400DA61A1 /* FeedAPIService.swift in Sources */,
