@@ -61,10 +61,12 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.title = "Popular"
-        
+        self.refreshControl = UIRefreshControl()
         self.tableView.prefetchDataSource = self
         self.tableView.register(MovieCell.self, forCellReuseIdentifier: "MovieCell")
         self.tableView.register(LoadMoreCell.self, forCellReuseIdentifier: "LoadMoreCell")
+        self.refreshControl?.addTarget(self, action: #selector(fetchMovies(_:)), for: .valueChanged)
+        self.refreshControl?.beginRefreshing()
         fetchMovies()
     }
 
@@ -82,15 +84,17 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.datasource.apply(snapshot, animatingDifferences: true)
     }
     
+    @objc
     private func fetchMovies(_ page: Int = 1) {
         self.page = page
         
         apiService?.fetchPopularMovies(page: page)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { error in
-                
+                self.refreshControl?.endRefreshing()
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
+                self.refreshControl?.endRefreshing()
                 let controllers = movies.map { MovieCellController(id: $0.id,
                                                                    title: $0.title,
                                                                    pathImage: $0.poster_path,
