@@ -17,7 +17,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
 
     private var refreshViewController: FeedRefreshViewController?
     private var isLoadMore: Bool = false
-    private var page: Int = 0
+    private var page: Int = 1
     private var tasks = [IndexPath: ImageDataLoaderTask]()
     
     private var apiService: FeedLoader?
