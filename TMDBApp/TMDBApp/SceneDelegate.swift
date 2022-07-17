@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
         let refreshViewController = FeedRefreshViewController(apiService: service)
 
-        let vc = ViewController(apiService: service, imageLoader: service, refreshViewController: refreshViewController) { [weak self] id in
+        let vc = ViewController(refreshViewController: refreshViewController) { [weak self] id in
             guard let self = self else { return }
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
         }

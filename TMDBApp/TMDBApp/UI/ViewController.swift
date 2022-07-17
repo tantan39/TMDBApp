@@ -19,15 +19,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     private var isLoadMore: Bool = false
     private var page: Int = 1
     
-    private var apiService: FeedLoader?
-    private var imageLoader: ImageDataLoader?
     private var onSelected: ((Int) -> Void)?
     private var cancellables = Set<AnyCancellable>()
     
-    convenience init(apiService: FeedLoader, imageLoader: ImageDataLoader, refreshViewController: FeedRefreshViewController, onSelected: ((Int) -> Void)? = { _ in }) {
+    convenience init(refreshViewController: FeedRefreshViewController, onSelected: ((Int) -> Void)? = { _ in }) {
         self.init()
-        self.apiService = apiService
-        self.imageLoader = imageLoader
         self.refreshViewController = refreshViewController
         self.onSelected = onSelected
     }
@@ -73,20 +69,20 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         self.datasource.apply(snapshot, animatingDifferences: true)
     }
     
-    @objc
-    private func fetchMovies(_ page: Int = 1) {
-        self.page = page
-        
-        apiService?.fetchPopularMovies(page: page)
-            .dispatchOnMainQueue()
-            .sink(receiveCompletion: { error in
-            }, receiveValue: { [weak self] movies in
-                guard let self = self else { return }
-                let controllers = movies.map { MovieCellController(movie: $0, imageLoader: self.imageLoader!) }
-                self.page == 1 ? self.set(controllers) : self.append(controllers)
-            })
-            .store(in: &cancellables)
-    }
+//    @objc
+//    private func fetchMovies(_ page: Int = 1) {
+//        self.page = page
+//
+//        apiService?.fetchPopularMovies(page: page)
+//            .dispatchOnMainQueue()
+//            .sink(receiveCompletion: { error in
+//            }, receiveValue: { [weak self] movies in
+//                guard let self = self else { return }
+//                let controllers = movies.map { MovieCellController(movie: $0, imageLoader: self.imageLoader!) }
+//                self.page == 1 ? self.set(controllers) : self.append(controllers)
+//            })
+//            .store(in: &cancellables)
+//    }
 
 //    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 //        guard let controller = datasource.itemIdentifier(for: indexPath) as? MovieCellController, let url = controller.posterURL else { return }
@@ -113,16 +109,16 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
         return UITableView.automaticDimension
     }
     
-    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard scrollView.isDragging else { return }
-        
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        if (offsetY > contentHeight - scrollView.frame.height) && !self.isLoadMore {
-            self.isLoadMore = true
-            self.fetchMovies(self.page + 1)
-        }
-    }
+//    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard scrollView.isDragging else { return }
+//
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//        if (offsetY > contentHeight - scrollView.frame.height) && !self.isLoadMore {
+//            self.isLoadMore = true
+//            self.fetchMovies(self.page + 1)
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
