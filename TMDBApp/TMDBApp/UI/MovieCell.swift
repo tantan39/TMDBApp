@@ -79,6 +79,10 @@ class MovieCellController {
     private let imageLoader: ImageDataLoader
     private var task: ImageDataLoaderTask?
     
+    var movieID: Int {
+        movie.id
+    }
+    
     internal init(movie: Movie, imageLoader: ImageDataLoader) {
         self.movie = movie
         self.imageLoader = imageLoader

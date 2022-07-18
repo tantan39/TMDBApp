@@ -96,7 +96,7 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let controller = self.datasource.itemIdentifier(for: indexPath) as? MovieCellController else { return }
-//        self.onSelected?(controller.id)
+        self.onSelected?(controller.movieID)
     }
     
     private func cellController(forRowAt indexPath: IndexPath) -> MovieCellController? {
