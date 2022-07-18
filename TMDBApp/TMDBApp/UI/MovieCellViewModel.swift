@@ -7,14 +7,15 @@
 
 import UIKit
 
-class MovieCellViewModel {
+class MovieCellViewModel<Image> {
     typealias Observer<T> = ( (T) -> Void)
     
     private let movie: Movie
     private let imageLoader: ImageDataLoader
     private var task: ImageDataLoaderTask?
-    var onImageLoad: Observer<UIImage>?
+    var onImageLoad: Observer<Image>?
     var onImageLoadingStateChange: Observer<Bool>?
+    private var imageTransformer: ((Data) -> Image?)
     
     var movieID: Int {
         movie.id
@@ -33,19 +34,21 @@ class MovieCellViewModel {
         movie.overview
     }
     
-    internal init(movie: Movie, imageLoader: ImageDataLoader) {
+    internal init(movie: Movie, imageLoader: ImageDataLoader, imageTransformer: @escaping ((Data) -> Image?)) {
         self.movie = movie
         self.imageLoader = imageLoader
+        self.imageTransformer = imageTransformer
     }
     
     func loadImageData() {
         if let url = posterURL {
             self.onImageLoadingStateChange?(false)
             self.task = self.imageLoader.loadImageData(from: url) { result in
-                let data = try? result.get()
-                DispatchQueue.main.async {
-                    self.onImageLoad?(data.flatMap(UIImage.init) ?? .init())
-                    self.onImageLoadingStateChange?(true)
+                if let image = (try? result.get()).flatMap(self.imageTransformer) {
+                    DispatchQueue.main.async {
+                        self.onImageLoad?(image)
+                        self.onImageLoadingStateChange?(true)
+                    }
                 }
             }
         }

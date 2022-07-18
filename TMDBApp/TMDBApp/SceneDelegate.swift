@@ -36,12 +36,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
         
         refreshViewModel.onFeedLoad = { [weak vc] movies in
-            let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service)) }
+            let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service, imageTransformer: UIImage.init)) }
             vc?.set(controllers)
         }
         
         loadMoreViewModel.onPaging = { [weak vc] movies in
-            let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service)) }
+            let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service, imageTransformer: UIImage.init)) }
             vc?.append(controllers)
         }
         

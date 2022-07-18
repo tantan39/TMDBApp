@@ -8,13 +8,13 @@
 import UIKit
 
 class MovieCellController {
-    private let viewModel: MovieCellViewModel
+    private let viewModel: MovieCellViewModel<UIImage>
     
     var movieID: Int {
         viewModel.movieID
     }
     
-    internal init(viewModel: MovieCellViewModel) {
+    internal init(viewModel: MovieCellViewModel<UIImage>) {
         self.viewModel = viewModel
     }
     
