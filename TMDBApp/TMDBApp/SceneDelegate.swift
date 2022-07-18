@@ -25,7 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
-        let refreshViewController = FeedRefreshViewController(apiService: service)
+        let refreshViewModel = FeedRefreshViewModel(apiService: service)
+        let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
         let loadMoreController = LoadMoreCellController(apiService: service)
 
         let vc = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController) { [weak self] id in
@@ -33,7 +34,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
         }
         
-        refreshViewController.onRefresh = { [weak vc] movies in
+        refreshViewModel.onFeedLoad = { [weak vc] movies in
             let controllers = movies.map { MovieCellController(movie: $0, imageLoader: service) }
             vc?.set(controllers)
         }

@@ -10,31 +10,23 @@ import UIKit
 
 class FeedRefreshViewController: NSObject {
     
-    lazy var view: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        return refreshControl
-    }()
-    private var apiService: FeedLoader
-    private var cancellables = Set<AnyCancellable>()
-    var onRefresh: ([Movie]) -> Void = { _ in }
-    
-    init(apiService: FeedLoader) {
-        self.apiService = apiService
+    lazy var view: UIRefreshControl = binding(UIRefreshControl())
+    private var viewModel: FeedRefreshViewModel
+
+    init(viewModel: FeedRefreshViewModel) {
+        self.viewModel = viewModel
     }
     
     @objc
     func refresh() {
-        self.view.beginRefreshing()
-        apiService.fetchPopularMovies(page: 1)
-            .dispatchOnMainQueue()
-            .sink(receiveCompletion: { error in
-                
-            }, receiveValue: { [weak self] movies in
-                guard let self = self else { return }
-                self.view.endRefreshing()
-                self.onRefresh(movies)
-            })
-            .store(in: &cancellables)
+        self.viewModel.loadFeed()
+    }
+    
+    private func binding(_ view: UIRefreshControl) -> UIRefreshControl {
+        self.viewModel.onLoadingStateChange = { [weak self] isLoading in
+            isLoading ? self?.view.beginRefreshing() : self?.view.endRefreshing()
+        }
+        view.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        return view
     }
 }

@@ -29,6 +29,7 @@
 		B4856E1727FFBCA20081C7F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4856E1527FFBCA20081C7F3 /* LaunchScreen.storyboard */; };
 		B4856E1F27FFBCF10081C7F3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E1E27FFBCF10081C7F3 /* Constants.swift */; };
 		B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E2327FFBD630081C7F3 /* FeedLoader.swift */; };
+		B4EC55E32885FB9F00BAAEE4 /* FeedRefreshViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 		B4856E1827FFBCA20081C7F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4856E1E27FFBCF10081C7F3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4856E2327FFBD630081C7F3 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
+		B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRefreshViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 				B471698028006F8800DA61A1 /* LoadMoreCell.swift */,
 				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 				B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */,
+				B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */,
 				B4716986280074B000DA61A1 /* MovieDetailVC.swift */,
 			);
 			path = UI;
@@ -300,6 +303,7 @@
 				B47169A828046D0700DA61A1 /* URLSessionHTTPClient.swift in Sources */,
 				B47A845C2810565F00F574C9 /* CombineHelpers.swift in Sources */,
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
+				B4EC55E32885FB9F00BAAEE4 /* FeedRefreshViewModel.swift in Sources */,
 				B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */,
 				B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */,
 				B40146652883A3FD006D6ACB /* FeedRefreshViewController.swift in Sources */,
