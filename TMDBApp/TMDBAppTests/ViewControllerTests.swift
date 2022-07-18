@@ -145,14 +145,15 @@ class ViewControllerTests: XCTestCase {
         let loader = FeedServiceSpy()
         let refreshViewModel = FeedRefreshViewModel(apiService: loader)
         let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
-        let loadMoreController = LoadMoreCellController(apiService: loader)
+        let loadMoreViewModel = LoadMoreCellViewModel(apiService: loader)
+        let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
         let viewController = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController)
         refreshViewModel.onFeedLoad = { [weak viewController] feed in
             let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader)) }
             viewController?.set(controllers)
         }
         
-        loadMoreController.onPaging = { [weak viewController] feed in
+        loadMoreViewModel.onPaging = { [weak viewController] feed in
             let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader)) }
             viewController?.append(controllers)
         }

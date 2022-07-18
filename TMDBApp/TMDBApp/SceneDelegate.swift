@@ -27,7 +27,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
         let refreshViewModel = FeedRefreshViewModel(apiService: service)
         let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
-        let loadMoreController = LoadMoreCellController(apiService: service)
+        let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
+        let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
 
         let vc = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController) { [weak self] id in
             guard let self = self else { return }
@@ -39,7 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             vc?.set(controllers)
         }
         
-        loadMoreController.onPaging = { [weak vc] movies in
+        loadMoreViewModel.onPaging = { [weak vc] movies in
             let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service)) }
             vc?.append(controllers)
         }
