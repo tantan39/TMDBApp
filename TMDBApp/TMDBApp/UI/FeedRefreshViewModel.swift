@@ -21,14 +21,14 @@ class FeedRefreshViewModel {
     }
     
     func loadFeed() {
-        self.onLoadingStateChange(false)
+        self.onLoadingStateChange(true)
         apiService.fetchPopularMovies(page: 1)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { error in
                 
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
-                self.onLoadingStateChange(true)
+                self.onLoadingStateChange(false)
                 self.onFeedLoad(movies)
             })
             .store(in: &cancellables)
