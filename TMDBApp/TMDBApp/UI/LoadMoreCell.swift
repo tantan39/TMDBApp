@@ -6,13 +6,38 @@
 //
 
 import UIKit
+import Combine
 
-public struct LoadMoreCellController: Hashable {
+public class LoadMoreCellController: Hashable {
     let id: AnyHashable = UUID()
+    private var page: Int = 1
+    private var isLoadMore: Bool = false
+    private var apiService: FeedLoader
+    private var cancellables = Set<AnyCancellable>()
+    var onPaging: ([Movie]) -> Void = { _ in }
+    
+    internal init(apiService: FeedLoader) {
+        self.apiService = apiService
+    }
     
     func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell") as? LoadMoreCell else { return UITableViewCell() }
         return cell
+    }
+    
+    func loadMore() {
+        guard !isLoadMore else { return }
+        isLoadMore = true
+        self.page += 1
+        
+        apiService.fetchPopularMovies(page: page)
+            .dispatchOnMainQueue()
+            .sink(receiveCompletion: { error in
+            }, receiveValue: { [weak self] movies in
+                self?.isLoadMore = false
+                self?.onPaging(movies)
+            })
+            .store(in: &cancellables)
     }
 
     public static func == (lhs: LoadMoreCellController, rhs: LoadMoreCellController) -> Bool {
