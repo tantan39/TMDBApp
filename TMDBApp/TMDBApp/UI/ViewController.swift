@@ -31,11 +31,11 @@ class ViewController: UITableViewController, UITableViewDataSourcePrefetching {
     lazy var datasource = UITableViewDiffableDataSource<Section, AnyHashable>(tableView: tableView) { [weak self] tableView, indexPath, controller in
         switch controller {
         case let controller as MovieCellController:
-            let cell = controller.view(in: tableView, forItemAt: indexPath)
+            let cell = controller.view(in: tableView)
             return cell
             
         case let loadMoreController as LoadMoreCellController:
-            return loadMoreController.view(in: tableView, forItemAt: indexPath)
+            return loadMoreController.view(in: tableView)
             
         default:
             return UITableViewCell()

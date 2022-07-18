@@ -20,7 +20,7 @@ public class LoadMoreCellController: Hashable {
         self.apiService = apiService
     }
     
-    func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> UITableViewCell {
+    func view(in tableView: UITableView) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LoadMoreCell") as? LoadMoreCell else { return UITableViewCell() }
         return cell
     }

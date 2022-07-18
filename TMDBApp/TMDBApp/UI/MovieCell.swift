@@ -93,7 +93,7 @@ class MovieCellController {
         return url
     }
     
-    func view(in tableView: UITableView, forItemAt indexPath: IndexPath) -> MovieCell {
+    func view(in tableView: UITableView) -> MovieCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell") as? MovieCell else { return MovieCell() }
         cell.titleLabel.text = self.movie.title
         cell.descriptionLabel.text = self.movie.overview
