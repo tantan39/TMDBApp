@@ -47,11 +47,12 @@ class ViewControllerTests: XCTestCase {
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
 
-            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
+//            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
+            let cell = controller.view(in: sut.tableView)
 
-            XCTAssertEqual(controller.title, item.title)
-            XCTAssertEqual(controller.description, item.overview)
-            XCTAssertEqual(controller.pathImage, item.poster_path)
+//            XCTAssertEqual(controller.title, item.title)
+//            XCTAssertEqual(controller.description, item.overview)
+//            XCTAssertEqual(controller.pathImage, item.poster_path)
 
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
@@ -80,7 +81,7 @@ class ViewControllerTests: XCTestCase {
         loader.complete(with: movies, at: 0)
         sut.simulateLoadMore()
 
-        let _ = try? XCTUnwrap(sut.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
+        let _ = try XCTUnwrap(sut.simulateItemVisible(at: 0, section: .loadMore) as? LoadMoreCell)
     }
 
     func test_tableView_loadMoreSuccess_responseListItem() throws {
@@ -104,11 +105,7 @@ class ViewControllerTests: XCTestCase {
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
 
-            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
-
-            XCTAssertEqual(controller.title, item.title)
-            XCTAssertEqual(controller.description, item.overview)
-            XCTAssertEqual(controller.pathImage, item.poster_path)
+            let cell = controller.view(in: sut.tableView)
 
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
@@ -136,11 +133,7 @@ class ViewControllerTests: XCTestCase {
         for (index, item) in movies.enumerated() {
             let controller = try XCTUnwrap(snapshot.itemIdentifiers(inSection: .movie)[index] as? MovieCellController)
 
-            let cell = controller.view(in: sut.tableView, forItemAt: IndexPath(row: index, section: 0))
-
-            XCTAssertEqual(controller.title, item.title)
-            XCTAssertEqual(controller.description, item.overview)
-            XCTAssertEqual(controller.pathImage, item.poster_path)
+            let cell = controller.view(in: sut.tableView)
 
             XCTAssertEqual(cell.titleLabel.text, item.title)
             XCTAssertEqual(cell.descriptionLabel.text, item.overview)
@@ -150,8 +143,19 @@ class ViewControllerTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
-        let feedService = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
-        let viewController = ViewController(apiService: loader, imageLoader: feedService)
+        let refreshViewController = FeedRefreshViewController(apiService: loader)
+        let loadMoreController = LoadMoreCellController(apiService: loader)
+        let viewController = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController)
+        refreshViewController.onRefresh = { [weak viewController] feed in
+            let controllers = feed.map { MovieCellController(movie: $0, imageLoader: loader) }
+            viewController?.set(controllers)
+        }
+        
+        loadMoreController.onPaging = { [weak viewController] feed in
+            let controllers = feed.map { MovieCellController(movie: $0, imageLoader: loader) }
+            viewController?.append(controllers)
+        }
+        
         trackMemoryLeaks(viewController, file: file, line: line)
         return (viewController, loader)
     }
@@ -161,7 +165,7 @@ class ViewControllerTests: XCTestCase {
         
     }
     
-    private class FeedServiceSpy: FeedLoader {
+    private class FeedServiceSpy: FeedLoader, ImageDataLoader {
         
         private var messages: [PassthroughSubject<[Movie], Error>] = []
 
@@ -169,6 +173,10 @@ class ViewControllerTests: XCTestCase {
             let publisher = PassthroughSubject<[Movie], Error>()
             messages.append(publisher)
             return publisher.eraseToAnyPublisher()
+        }
+        
+        func loadImageData(from url: URL, completion: @escaping (Result<Data, Error>) -> Void) -> ImageDataLoaderTask {
+            return Task()
         }
         
         func complete(with items: [Movie], at index: Int = 0) {
@@ -183,6 +191,11 @@ class ViewControllerTests: XCTestCase {
         func getMovieDetail(_ id: Int, completion: @escaping (Result<Movie, Error>) -> Void) { }
     }
     
+    struct Task: ImageDataLoaderTask {
+        func cancel() {
+            
+        }
+    }
     
 }
 
@@ -197,5 +210,15 @@ extension XCTestCase {
         addTeardownBlock { [weak instance] in
             XCTAssertNil(instance, "Instance should have been dellocated. Potential memory leak", file: file, line: line)
         }
+    }
+}
+
+private extension UIRefreshControl {
+    func simulatePullToRefresh() {
+        allTargets.forEach { target in
+            actions(forTarget: target, forControlEvent: .valueChanged)?.forEach { (target as NSObject).perform(Selector($0))
+            }
+        }
+
     }
 }
