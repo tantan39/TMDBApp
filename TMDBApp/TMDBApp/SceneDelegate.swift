@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     func makeViewController() -> ViewController {
-        let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: .shared))
+        let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: URLSession(configuration: .ephemeral)))
         let refreshViewModel = FeedRefreshViewModel(apiService: service)
         let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
