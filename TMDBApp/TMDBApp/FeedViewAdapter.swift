@@ -16,8 +16,8 @@ class FeedViewAdapter: FeedView {
         self.loader = loader
     }
     
-    func display(feed: [Movie]) {
-        let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
+    func display(_ viewModel: FeedViewModel) {
+        let controllers = viewModel.feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
         viewController?.set(controllers)
     }
 }

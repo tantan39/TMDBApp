@@ -8,12 +8,20 @@
 import Foundation
 import Combine
 
+struct FeedViewModel {
+    var feed: [Movie]
+}
+
+struct FeedLoadingViewModel {
+    var isLoading: Bool
+}
+
 protocol FeedView {
-    func display(feed: [Movie])
+    func display(_ viewModel: FeedViewModel)
 }
 
 protocol FeedLoadingView {
-    func display(isLoading: Bool)
+    func display(_ viewModel: FeedLoadingViewModel)
 }
 
 class FeedPresenter {
@@ -30,15 +38,15 @@ class FeedPresenter {
     }
     
     func loadFeed() {
-        self.loadingView?.display(isLoading: true)
+        self.loadingView?.display(FeedLoadingViewModel(isLoading: true))
         apiService.fetchPopularMovies(page: 1)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { error in
                 
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
-                self.loadingView?.display(isLoading: false)
-                self.feedView?.display(feed: movies)
+                self.loadingView?.display(FeedLoadingViewModel(isLoading: false))
+                self.feedView?.display(FeedViewModel(feed: movies))
             })
             .store(in: &cancellables)
     }

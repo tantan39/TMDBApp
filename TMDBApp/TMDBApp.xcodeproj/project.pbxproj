@@ -144,6 +144,7 @@
 				B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */,
 				B4856E1E27FFBCF10081C7F3 /* Constants.swift */,
 				B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */,
+				B4EC55E22885FB9F00BAAEE4 /* FeedPresenter.swift */,
 				B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */,
 				B47A845B2810565F00F574C9 /* CombineHelpers.swift */,
 				B4856E1027FFBC9E0081C7F3 /* Main.storyboard */,
@@ -186,7 +187,6 @@
 				B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */,
 				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 				B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */,
-				B4EC55E22885FB9F00BAAEE4 /* FeedPresenter.swift */,
 				B4716986280074B000DA61A1 /* MovieDetailVC.swift */,
 			);
 			path = UI;
