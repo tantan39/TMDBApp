@@ -17,7 +17,13 @@ class FeedViewAdapter: FeedView {
     }
     
     func display(_ viewModel: FeedViewModel) {
-        let controllers = viewModel.feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
+
+        let controllers = viewModel.feed.map { model -> MovieCellController in
+            let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<MovieCellController>, UIImage>(model: model, imageLoader: loader)
+            let view = MovieCellController(delegate: adapter, movieID: model.id)
+            adapter.presenter = MovieCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
+            return view
+        }
         viewController?.set(controllers)
     }
 }
