@@ -145,7 +145,7 @@ class ViewControllerTests: XCTestCase {
         let loader = FeedServiceSpy()
         let presenter = FeedPresenter()
         let adapter = FeedLoaderPresentationAdapter(presenter: presenter, loader: loader)
-        let refreshViewController = FeedRefreshViewController(loadFeed: adapter.loadFeed)
+        let refreshViewController = FeedRefreshViewController(delegate: adapter)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: loader)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
         let viewController = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController)

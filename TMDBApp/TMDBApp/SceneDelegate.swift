@@ -28,7 +28,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: URLSession(configuration: .ephemeral)))
         let presenter = FeedPresenter()
         let adapter = FeedLoaderPresentationAdapter(presenter: presenter, loader: service)
-        let refreshViewController = FeedRefreshViewController(loadFeed: adapter.loadFeed)
+        let refreshViewController = FeedRefreshViewController(delegate: adapter)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
 
@@ -50,7 +50,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 }
 
-class FeedLoaderPresentationAdapter {
+class FeedLoaderPresentationAdapter: FeedRefreshViewControllerDelegate {
     private let presenter: FeedPresenter
     private let loader: FeedLoader
     private var cancellables = Set<AnyCancellable>()
@@ -60,7 +60,8 @@ class FeedLoaderPresentationAdapter {
         self.loader = loader
     }
     
-    func loadFeed() {
+    func didRequestRefresh() {
+        self.presenter.didStartLoadingFeed()
         loader.fetchPopularMovies(page: 1)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { [weak self] result in
