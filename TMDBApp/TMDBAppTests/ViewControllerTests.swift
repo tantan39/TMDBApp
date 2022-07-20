@@ -143,8 +143,9 @@ class ViewControllerTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
-        let presenter = FeedPresenter(apiService: loader)
-        let refreshViewController = FeedRefreshViewController(loadFeed: presenter.loadFeed)
+        let presenter = FeedPresenter()
+        let adapter = FeedLoaderPresentationAdapter(presenter: presenter, loader: loader)
+        let refreshViewController = FeedRefreshViewController(loadFeed: adapter.loadFeed)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: loader)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
         let viewController = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController)

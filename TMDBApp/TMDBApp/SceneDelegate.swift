@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -25,8 +26,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: URLSession(configuration: .ephemeral)))
-        let presenter = FeedPresenter(apiService: service)
-        let refreshViewController = FeedRefreshViewController(loadFeed: presenter.loadFeed)
+        let presenter = FeedPresenter()
+        let adapter = FeedLoaderPresentationAdapter(presenter: presenter, loader: service)
+        let refreshViewController = FeedRefreshViewController(loadFeed: adapter.loadFeed)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
 
@@ -46,6 +48,34 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return vc
     }
 
+}
+
+class FeedLoaderPresentationAdapter {
+    private let presenter: FeedPresenter
+    private let loader: FeedLoader
+    private var cancellables = Set<AnyCancellable>()
+    
+    internal init(presenter: FeedPresenter, loader: FeedLoader) {
+        self.presenter = presenter
+        self.loader = loader
+    }
+    
+    func loadFeed() {
+        loader.fetchPopularMovies(page: 1)
+            .dispatchOnMainQueue()
+            .sink(receiveCompletion: { [weak self] result in
+                switch result {
+                case .failure(let err):
+                    self?.presenter.didFinishLoadingFeed(err)
+                default:
+                    break
+                }
+            }, receiveValue: { [weak self] movies in
+                guard let self = self else { return }
+                self.presenter.didFinishLoadingFeed(movies)
+            })
+            .store(in: &cancellables)
+    }
 }
 
 final class WeakRefVirtualProxy<T: AnyObject> {

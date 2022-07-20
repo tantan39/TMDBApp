@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 struct FeedViewModel {
     var feed: [Movie]
@@ -26,28 +25,20 @@ protocol FeedLoadingView {
 
 class FeedPresenter {
     typealias Observer<T> = (T) -> Void
-    
-    private var apiService: FeedLoader
-    private var cancellables = Set<AnyCancellable>()
-    
+        
     var feedView: FeedView?
     var loadingView: FeedLoadingView?
     
-    init(apiService: FeedLoader) {
-        self.apiService = apiService
+    func didStartLoadingFeed() {
+        self.loadingView?.display(FeedLoadingViewModel(isLoading: true))
     }
     
-    func loadFeed() {
-        self.loadingView?.display(FeedLoadingViewModel(isLoading: true))
-        apiService.fetchPopularMovies(page: 1)
-            .dispatchOnMainQueue()
-            .sink(receiveCompletion: { error in
-                
-            }, receiveValue: { [weak self] movies in
-                guard let self = self else { return }
-                self.loadingView?.display(FeedLoadingViewModel(isLoading: false))
-                self.feedView?.display(FeedViewModel(feed: movies))
-            })
-            .store(in: &cancellables)
+    func didFinishLoadingFeed(_ feed: [Movie]) {
+        self.loadingView?.display(FeedLoadingViewModel(isLoading: false))
+        self.feedView?.display(FeedViewModel(feed: feed))
+    }
+    
+    func didFinishLoadingFeed(_ error: Error) {
+        self.loadingView?.display(FeedLoadingViewModel(isLoading: false))
     }
 }
