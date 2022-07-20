@@ -26,8 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: URLSession(configuration: .ephemeral)))
-        let presenter = FeedPresenter()
-        let adapter = FeedLoaderPresentationAdapter(presenter: presenter, loader: service)
+        let adapter = FeedLoaderPresentationAdapter(loader: service)
         let refreshViewController = FeedRefreshViewController(delegate: adapter)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
@@ -37,8 +36,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
         }
         
-        presenter.loadingView = WeakRefVirtualProxy(object: refreshViewController)
-        presenter.feedView = FeedViewAdapter(controller: vc, loader: service)
+        adapter.presenter = FeedPresenter(
+            feedView: FeedViewAdapter(controller: vc, loader: service),
+            loadingView: WeakRefVirtualProxy(object: refreshViewController))
         
         loadMoreViewModel.onPaging = { [weak vc] movies in
             let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service, imageTransformer: UIImage.init)) }
@@ -51,29 +51,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 class FeedLoaderPresentationAdapter: FeedRefreshViewControllerDelegate {
-    private let presenter: FeedPresenter
+    var presenter: FeedPresenter?
     private let loader: FeedLoader
     private var cancellables = Set<AnyCancellable>()
     
-    internal init(presenter: FeedPresenter, loader: FeedLoader) {
-        self.presenter = presenter
+    internal init(loader: FeedLoader) {
         self.loader = loader
     }
     
     func didRequestRefresh() {
-        self.presenter.didStartLoadingFeed()
+        self.presenter?.didStartLoadingFeed()
         loader.fetchPopularMovies(page: 1)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { [weak self] result in
                 switch result {
                 case .failure(let err):
-                    self?.presenter.didFinishLoadingFeed(err)
+                    self?.presenter?.didFinishLoadingFeed(with: err)
                 default:
                     break
                 }
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
-                self.presenter.didFinishLoadingFeed(movies)
+                self.presenter?.didFinishLoadingFeed(with: movies)
             })
             .store(in: &cancellables)
     }
