@@ -54,12 +54,3 @@ class MovieCellPresenter<View: MovieImageView, Image> where View.Image == Image 
                                         isLoading: false))
     }
 }
-
-struct MovieCellViewModel<Image> {
-    let movieID: Int?
-    let posterURL: URL?
-    let title: String?
-    let overview: String?
-    let image: Image?
-    let isLoading: Bool
-}

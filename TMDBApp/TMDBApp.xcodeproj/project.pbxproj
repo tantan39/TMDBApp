@@ -35,6 +35,9 @@
 		B4EC55E92886059F00BAAEE4 /* LoadMoreCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E82886059F00BAAEE4 /* LoadMoreCellController.swift */; };
 		B4EC55EB288605BB00BAAEE4 /* LoadMoreCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */; };
 		B4EC55ED2887962300BAAEE4 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */; };
+		B4EC55EF288859D600BAAEE4 /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55EE288859D600BAAEE4 /* FeedViewModel.swift */; };
+		B4EC55F1288859F400BAAEE4 /* FeedLoadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55F0288859F400BAAEE4 /* FeedLoadingViewModel.swift */; };
+		B4EC55F328885A0900BAAEE4 /* MovieCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55F228885A0900BAAEE4 /* MovieCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +82,9 @@
 		B4EC55E82886059F00BAAEE4 /* LoadMoreCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellController.swift; sourceTree = "<group>"; };
 		B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellViewModel.swift; sourceTree = "<group>"; };
 		B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
+		B4EC55EE288859D600BAAEE4 /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
+		B4EC55F0288859F400BAAEE4 /* FeedLoadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoadingViewModel.swift; sourceTree = "<group>"; };
+		B4EC55F228885A0900BAAEE4 /* MovieCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,11 +188,14 @@
 				B471697E27FFD8F000DA61A1 /* MovieCell.swift */,
 				B4EC55E42886037C00BAAEE4 /* MovieCellController.swift */,
 				B4EC55E62886039C00BAAEE4 /* MovieCellPresenter.swift */,
+				B4EC55F228885A0900BAAEE4 /* MovieCellViewModel.swift */,
 				B471698028006F8800DA61A1 /* LoadMoreCell.swift */,
 				B4EC55E82886059F00BAAEE4 /* LoadMoreCellController.swift */,
 				B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */,
 				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 				B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */,
+				B4EC55EE288859D600BAAEE4 /* FeedViewModel.swift */,
+				B4EC55F0288859F400BAAEE4 /* FeedLoadingViewModel.swift */,
 				B4716986280074B000DA61A1 /* MovieDetailVC.swift */,
 			);
 			path = UI;
@@ -314,18 +323,21 @@
 				B4856E0F27FFBC9E0081C7F3 /* ViewController.swift in Sources */,
 				B471698128006F8900DA61A1 /* LoadMoreCell.swift in Sources */,
 				B4856E0B27FFBC9E0081C7F3 /* AppDelegate.swift in Sources */,
+				B4EC55EF288859D600BAAEE4 /* FeedViewModel.swift in Sources */,
 				B4EC55E92886059F00BAAEE4 /* LoadMoreCellController.swift in Sources */,
 				B471697F27FFD8F000DA61A1 /* MovieCell.swift in Sources */,
 				B47169A828046D0700DA61A1 /* URLSessionHTTPClient.swift in Sources */,
 				B47A845C2810565F00F574C9 /* CombineHelpers.swift in Sources */,
 				B4EC55E72886039C00BAAEE4 /* MovieCellPresenter.swift in Sources */,
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
+				B4EC55F328885A0900BAAEE4 /* MovieCellViewModel.swift in Sources */,
 				B4EC55EB288605BB00BAAEE4 /* LoadMoreCellViewModel.swift in Sources */,
 				B4EC55E32885FB9F00BAAEE4 /* FeedPresenter.swift in Sources */,
 				B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */,
 				B4EC55E52886037C00BAAEE4 /* MovieCellController.swift in Sources */,
 				B4EC55ED2887962300BAAEE4 /* FeedViewAdapter.swift in Sources */,
 				B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */,
+				B4EC55F1288859F400BAAEE4 /* FeedLoadingViewModel.swift in Sources */,
 				B40146652883A3FD006D6ACB /* FeedRefreshViewController.swift in Sources */,
 				B47169832800705900DA61A1 /* Movie.swift in Sources */,
 				B4856E1F27FFBCF10081C7F3 /* Constants.swift in Sources */,
