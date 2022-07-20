@@ -29,11 +29,12 @@
 		B4856E1727FFBCA20081C7F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B4856E1527FFBCA20081C7F3 /* LaunchScreen.storyboard */; };
 		B4856E1F27FFBCF10081C7F3 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E1E27FFBCF10081C7F3 /* Constants.swift */; };
 		B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4856E2327FFBD630081C7F3 /* FeedLoader.swift */; };
-		B4EC55E32885FB9F00BAAEE4 /* FeedRefreshViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */; };
+		B4EC55E32885FB9F00BAAEE4 /* FeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E22885FB9F00BAAEE4 /* FeedPresenter.swift */; };
 		B4EC55E52886037C00BAAEE4 /* MovieCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E42886037C00BAAEE4 /* MovieCellController.swift */; };
 		B4EC55E72886039C00BAAEE4 /* MovieCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E62886039C00BAAEE4 /* MovieCellViewModel.swift */; };
 		B4EC55E92886059F00BAAEE4 /* LoadMoreCellController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55E82886059F00BAAEE4 /* LoadMoreCellController.swift */; };
 		B4EC55EB288605BB00BAAEE4 /* LoadMoreCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */; };
+		B4EC55ED2887962300BAAEE4 /* FeedViewAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,11 +73,12 @@
 		B4856E1827FFBCA20081C7F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B4856E1E27FFBCF10081C7F3 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B4856E2327FFBD630081C7F3 /* FeedLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedLoader.swift; sourceTree = "<group>"; };
-		B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRefreshViewModel.swift; sourceTree = "<group>"; };
+		B4EC55E22885FB9F00BAAEE4 /* FeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedPresenter.swift; sourceTree = "<group>"; };
 		B4EC55E42886037C00BAAEE4 /* MovieCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellController.swift; sourceTree = "<group>"; };
 		B4EC55E62886039C00BAAEE4 /* MovieCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCellViewModel.swift; sourceTree = "<group>"; };
 		B4EC55E82886059F00BAAEE4 /* LoadMoreCellController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellController.swift; sourceTree = "<group>"; };
 		B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreCellViewModel.swift; sourceTree = "<group>"; };
+		B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewAdapter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 				B4856E0A27FFBC9E0081C7F3 /* AppDelegate.swift */,
 				B4856E1E27FFBCF10081C7F3 /* Constants.swift */,
 				B4856E0C27FFBC9E0081C7F3 /* SceneDelegate.swift */,
+				B4EC55EC2887962300BAAEE4 /* FeedViewAdapter.swift */,
 				B47A845B2810565F00F574C9 /* CombineHelpers.swift */,
 				B4856E1027FFBC9E0081C7F3 /* Main.storyboard */,
 				B4856E1327FFBCA20081C7F3 /* Assets.xcassets */,
@@ -183,7 +186,7 @@
 				B4EC55EA288605BB00BAAEE4 /* LoadMoreCellViewModel.swift */,
 				B4856E0E27FFBC9E0081C7F3 /* ViewController.swift */,
 				B40146642883A3FD006D6ACB /* FeedRefreshViewController.swift */,
-				B4EC55E22885FB9F00BAAEE4 /* FeedRefreshViewModel.swift */,
+				B4EC55E22885FB9F00BAAEE4 /* FeedPresenter.swift */,
 				B4716986280074B000DA61A1 /* MovieDetailVC.swift */,
 			);
 			path = UI;
@@ -318,9 +321,10 @@
 				B4EC55E72886039C00BAAEE4 /* MovieCellViewModel.swift in Sources */,
 				B4856E0D27FFBC9E0081C7F3 /* SceneDelegate.swift in Sources */,
 				B4EC55EB288605BB00BAAEE4 /* LoadMoreCellViewModel.swift in Sources */,
-				B4EC55E32885FB9F00BAAEE4 /* FeedRefreshViewModel.swift in Sources */,
+				B4EC55E32885FB9F00BAAEE4 /* FeedPresenter.swift in Sources */,
 				B4856E2427FFBD630081C7F3 /* FeedLoader.swift in Sources */,
 				B4EC55E52886037C00BAAEE4 /* MovieCellController.swift in Sources */,
+				B4EC55ED2887962300BAAEE4 /* FeedViewAdapter.swift in Sources */,
 				B4716987280074B000DA61A1 /* MovieDetailVC.swift in Sources */,
 				B40146652883A3FD006D6ACB /* FeedRefreshViewController.swift in Sources */,
 				B47169832800705900DA61A1 /* Movie.swift in Sources */,
