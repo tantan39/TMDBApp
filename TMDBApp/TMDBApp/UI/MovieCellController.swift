@@ -14,7 +14,7 @@ protocol MovieCellControllerDelegate {
 
 class MovieCellController: MovieImageView {
     private let delegate: MovieCellControllerDelegate?
-    var cell: MovieCell?
+    private var cell: MovieCell?
     let movieID: Int
     
     internal init(delegate: MovieCellControllerDelegate, movieID: Int) {
@@ -23,9 +23,9 @@ class MovieCellController: MovieImageView {
     }
     
     func view(in tableView: UITableView) -> MovieCell {
-        cell = MovieCell()
+        cell = tableView.dequeueReusableCell()
         self.delegate?.didRequestImage()
-        return cell ?? MovieCell()
+        return cell!
     }
     
     func display(_ viewModel: MovieCellViewModel<UIImage>) {
@@ -41,7 +41,12 @@ class MovieCellController: MovieImageView {
     }
     
     func cancelLoad() {
+        releaseCellForReuse()
         delegate?.didCancelImageRequest()
+    }
+    
+    private func releaseCellForReuse() {
+        cell = nil
     }
 }
 
@@ -53,5 +58,12 @@ extension MovieCellController: Hashable {
     static func == (lhs: MovieCellController,
                     rhs: MovieCellController) -> Bool {
         lhs.movieID == rhs.movieID
+    }
+}
+
+extension UITableView {
+    func dequeueReusableCell<T: UITableViewCell>() -> T {
+        let identifier = String(describing: T.self)
+        return dequeueReusableCell(withIdentifier: identifier) as! T
     }
 }
