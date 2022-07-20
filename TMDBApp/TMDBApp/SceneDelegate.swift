@@ -35,7 +35,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
         }
         
-        presenter.loadingView = refreshViewController
+        presenter.loadingView = WeakRefVirtualProxy(object: refreshViewController)
         presenter.feedView = FeedViewAdapter(controller: vc, loader: service)
         
         loadMoreViewModel.onPaging = { [weak vc] movies in
@@ -46,4 +46,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return vc
     }
 
+}
+
+final class WeakRefVirtualProxy<T: AnyObject> {
+    private weak var object: T?
+    
+    init(object: T) {
+        self.object = object
+    }
+}
+
+extension WeakRefVirtualProxy: FeedLoadingView where T: FeedLoadingView {
+    func display(isLoading: Bool) {
+        object?.display(isLoading: isLoading)
+    }
 }

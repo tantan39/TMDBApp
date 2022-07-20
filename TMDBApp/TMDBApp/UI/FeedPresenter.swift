@@ -12,7 +12,7 @@ protocol FeedView {
     func display(feed: [Movie])
 }
 
-protocol FeedLoadingView: AnyObject {
+protocol FeedLoadingView {
     func display(isLoading: Bool)
 }
 
@@ -23,7 +23,7 @@ class FeedPresenter {
     private var cancellables = Set<AnyCancellable>()
     
     var feedView: FeedView?
-    weak var loadingView: FeedLoadingView?
+    var loadingView: FeedLoadingView?
     
     init(apiService: FeedLoader) {
         self.apiService = apiService
