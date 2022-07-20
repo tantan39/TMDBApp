@@ -25,8 +25,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func makeViewController() -> ViewController {
         let service = FeedAPIService(httpClient: URLSessionHTTPClient(session: URLSession(configuration: .ephemeral)))
-        let refreshViewModel = FeedRefreshViewModel(apiService: service)
-        let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
+        let presenter = FeedPresenter(apiService: service)
+        let refreshViewController = FeedRefreshViewController(presenter: presenter)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: service)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
 
@@ -35,10 +35,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             self.navController?.pushViewController(MovieDetailVC(service: service, imageLoader: service, movieID: id), animated: true)
         }
         
-        refreshViewModel.onFeedLoad = { [weak vc] movies in
-            let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service, imageTransformer: UIImage.init)) }
-            vc?.set(controllers)
-        }
+        presenter.loadingView = refreshViewController
+        presenter.feedView = FeedViewAdapter(controller: vc, loader: service)
         
         loadMoreViewModel.onPaging = { [weak vc] movies in
             let controllers = movies.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: service, imageTransformer: UIImage.init)) }
@@ -48,4 +46,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         return vc
     }
 
+}
+
+class FeedViewAdapter: FeedView {
+    private weak var viewController: ViewController?
+    private var loader: ImageDataLoader
+    
+    internal init(controller: ViewController?, loader: ImageDataLoader) {
+        self.viewController = controller
+        self.loader = loader
+    }
+    
+    func display(feed: [Movie]) {
+        let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
+        viewController?.set(controllers)
+    }
 }

@@ -8,28 +8,37 @@
 import Foundation
 import Combine
 
-class FeedRefreshViewModel {
+protocol FeedView {
+    func display(feed: [Movie])
+}
+
+protocol FeedLoadingView: AnyObject {
+    func display(isLoading: Bool)
+}
+
+class FeedPresenter {
     typealias Observer<T> = (T) -> Void
     
     private var apiService: FeedLoader
     private var cancellables = Set<AnyCancellable>()
-    var onLoadingStateChange: Observer<Bool> = { _ in }
-    var onFeedLoad: Observer<[Movie]> = { _ in }
+    
+    var feedView: FeedView?
+    weak var loadingView: FeedLoadingView?
     
     init(apiService: FeedLoader) {
         self.apiService = apiService
     }
     
     func loadFeed() {
-        self.onLoadingStateChange(true)
+        self.loadingView?.display(isLoading: true)
         apiService.fetchPopularMovies(page: 1)
             .dispatchOnMainQueue()
             .sink(receiveCompletion: { error in
                 
             }, receiveValue: { [weak self] movies in
                 guard let self = self else { return }
-                self.onLoadingStateChange(false)
-                self.onFeedLoad(movies)
+                self.loadingView?.display(isLoading: false)
+                self.feedView?.display(feed: movies)
             })
             .store(in: &cancellables)
     }
