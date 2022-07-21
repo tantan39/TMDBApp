@@ -35,16 +35,18 @@ class MovieCellController {
         cell.descriptionLabel.text = self.viewModel.overview
         cell.separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
         cell.poster.image = nil
-        cell.isShimmering = true
         
         viewModel.onImageLoad = { [weak cell] image in
-            cell?.isShimmering = false
             cell?.poster.setImageAnimated(image)
+        }
+        
+        viewModel.onImageLoadingStateChange = { [weak cell] loading in
+            cell?.isShimmering = loading
         }
     }
     
     func preload() {
-        viewModel.loadImageData()
+        viewModel.preload()
     }
     
     func cancelLoad() {

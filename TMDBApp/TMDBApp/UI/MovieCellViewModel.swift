@@ -42,15 +42,21 @@ class MovieCellViewModel<Image> {
     
     func loadImageData() {
         if let url = posterURL {
-            self.onImageLoadingStateChange?(false)
+            self.onImageLoadingStateChange?(true)
             self.task = self.imageLoader.loadImageData(from: url) { result in
                 if let image = (try? result.get()).flatMap(self.imageTransformer) {
                     DispatchQueue.main.async {
                         self.onImageLoad?(image)
-                        self.onImageLoadingStateChange?(true)
+                        self.onImageLoadingStateChange?(false)
                     }
                 }
             }
+        }
+    }
+    
+    func preload() {
+        if let url = posterURL {
+            self.task = self.imageLoader.loadImageData(from: url) { _ in }
         }
     }
     
