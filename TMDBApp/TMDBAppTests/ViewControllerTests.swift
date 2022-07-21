@@ -143,15 +143,13 @@ class ViewControllerTests: XCTestCase {
     // MARK: - Helpers
     private func makeSUT(file: StaticString = #filePath, line: UInt = #line) -> (sut: ViewController, loader: FeedServiceSpy) {
         let loader = FeedServiceSpy()
-        let refreshViewModel = FeedRefreshViewModel(apiService: loader)
-        let refreshViewController = FeedRefreshViewController(viewModel: refreshViewModel)
+        
+        let adapter = FeedLoaderPresentationAdapter(loader: loader)
+        let refreshViewController = FeedRefreshViewController(delegate: adapter)
         let loadMoreViewModel = LoadMoreCellViewModel(apiService: loader)
         let loadMoreController = LoadMoreCellController(viewModel: loadMoreViewModel)
         let viewController = ViewController(refreshViewController: refreshViewController, loadMoreController: loadMoreController)
-        refreshViewModel.onFeedLoad = { [weak viewController] feed in
-            let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
-            viewController?.set(controllers)
-        }
+        adapter.presenter = FeedPresenter(feedView: FeedViewAdapter(controller: viewController, loader: loader), loadingView: refreshViewController)
         
         loadMoreViewModel.onPaging = { [weak viewController] feed in
             let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
