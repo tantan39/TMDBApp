@@ -20,6 +20,10 @@ extension ViewController {
         simulateItemVisible(at: 0, section: .loadMore)
     }
     
+    func simulatePullToRefresh() {
+        self.refreshControl?.simulatePullToRefresh()
+    }
+    
     @discardableResult
     func simulateItemVisible(at index: Int, section: Section) -> UITableViewCell? {
         let cell = self.datasource.tableView(self.tableView, cellForRowAt: IndexPath(row: index, section: section.rawValue))

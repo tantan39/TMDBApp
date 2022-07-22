@@ -32,6 +32,25 @@ class ViewControllerTests: XCTestCase {
         XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
         XCTAssertEqual(snapshot.numberOfItems(inSection: .loadMore), 1)
     }
+    
+    func test_refresh_successDeliverMovies() {
+        let (sut, loader) = makeSUT()
+        let movies = [
+            makeMovieItem(id: 0),
+            makeMovieItem(id: 1, title: "another title", overView: "another overview")
+        ]
+
+        sut.loadViewIfNeeded()
+        loader.complete(with: [], at: 0)
+        
+        sut.simulatePullToRefresh()
+        loader.complete(with: movies, at: 1)
+
+        let snapshot = sut.datasource.snapshot()
+        XCTAssertEqual(snapshot.numberOfSections, 2)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .movie), movies.count)
+        XCTAssertEqual(snapshot.numberOfItems(inSection: .loadMore), 1)
+    }
 
     func test_fetchMovies_renderingCells() throws {
         let (sut, loader) = makeSUT()
