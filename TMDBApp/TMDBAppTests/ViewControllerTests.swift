@@ -161,7 +161,7 @@ class ViewControllerTests: XCTestCase {
     }
     
     private func makeMovieItem(id: Int, title: String = "a movie title", overView: String = "a overview") -> Movie {
-        Movie(id: id, title: "a movie title", overview: "a overview", poster_path: "poster path", backdrop_path: nil, release_date: nil, revenue: nil)
+        Movie(id: id, title: "a movie title", overview: "a overview", poster_path: "http://image.tmdb.org/t/p/", backdrop_path: nil, release_date: nil, revenue: nil)
         
     }
     
