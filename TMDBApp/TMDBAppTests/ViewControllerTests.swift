@@ -152,7 +152,12 @@ class ViewControllerTests: XCTestCase {
         adapter.presenter = FeedPresenter(feedView: FeedViewAdapter(controller: viewController, loader: loader), loadingView: refreshViewController)
         
         loadMoreViewModel.onPaging = { [weak viewController] feed in
-            let controllers = feed.map { MovieCellController(viewModel: MovieCellViewModel(movie: $0, imageLoader: loader, imageTransformer: UIImage.init)) }
+            let controllers = feed.map { model -> MovieCellController in
+                let adapter = FeedImageDataLoaderPresentationAdapter<WeakRefVirtualProxy<MovieCellController>, UIImage>(model: model, imageLoader: loader)
+                let view = MovieCellController(delegate: adapter, movieID: model.id)
+                adapter.presenter = MovieCellPresenter(view: WeakRefVirtualProxy(view), imageTransformer: UIImage.init)
+                return view
+            }
             viewController?.append(controllers)
         }
         
